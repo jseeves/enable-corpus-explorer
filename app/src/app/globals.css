@@ -1,0 +1,39 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Design tokens — kept minimal so Claude Code can extend */
+:root {
+  --color-bg: #fafaf9;        /* stone-50 */
+  --color-bg-elev: #ffffff;
+  --color-text: #1c1917;       /* stone-900 */
+  --color-text-muted: #57534e;  /* stone-600 */
+  --color-border: #e7e5e4;     /* stone-200 */
+  --color-accent: #166534;     /* green-800 — restoration */
+  --color-accent-soft: #dcfce7; /* green-100 */
+}
+
+body {
+  font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
+}
+
+/* Reset Plotly's modebar default styling so it fits our palette */
+.modebar { font-family: inherit; }
+
+/* Citation chip */
+.citation-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.125rem 0.5rem;
+  margin: 0 0.125rem;
+  font-size: 0.75rem;
+  font-family: ui-monospace, "SF Mono", monospace;
+  background: var(--color-accent-soft);
+  color: var(--color-accent);
+  border-radius: 4px;
+  cursor: pointer;
+  user-select: none;
+}
+.citation-chip:hover {
+  filter: brightness(0.95);
+}
