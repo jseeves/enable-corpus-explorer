@@ -7,6 +7,7 @@ import ChatInterface from "@/components/ChatInterface";
 export default function Home() {
   const [citedIds, setCitedIds] = useState<Set<string>>(new Set());
   const [focusedDocId, setFocusedDocId] = useState<string | null>(null);
+  const [explanationTrigger, setExplanationTrigger] = useState(0);
 
   return (
     <div className="flex flex-col h-screen bg-white overflow-hidden">
@@ -37,6 +38,7 @@ export default function Home() {
             citedIds={citedIds}
             focusedDocId={focusedDocId}
             onFocusDoc={setFocusedDocId}
+            onRequestExplanation={() => setExplanationTrigger((n) => n + 1)}
           />
         </div>
 
@@ -48,6 +50,7 @@ export default function Home() {
               setFocusedDocId(null);
             }}
             onFocusDoc={setFocusedDocId}
+            explanationTrigger={explanationTrigger}
           />
         </div>
       </div>

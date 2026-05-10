@@ -29,15 +29,28 @@ interface Message {
   content: string;
   mode?: ChatMode;
   citations?: CitationData[];
+  isExplanation?: boolean;
 }
 
 interface Props {
   onCitations: (ids: string[]) => void;
   onFocusDoc: (id: string) => void;
+  explanationTrigger: number;
 }
 
+const EXPLANATION =
+`Each dot on this map is one of the 92 documents in the Enable corpus: guides, research papers, policy briefs, and field reports on landscape restoration.
 
-export default function ChatInterface({ onCitations, onFocusDoc }: Props) {
+To position each document in space, it is converted into an embedding: a list of 1,024 numbers that captures its meaning, not just its keywords. Think of it as a semantic fingerprint. Documents covering similar ideas produce similar fingerprints; dissimilar ones diverge.
+
+Each document is first broken into overlapping chunks of roughly 400 words. Each chunk is passed through Voyage AI's embedding model, which encodes it into a point in 1,024-dimensional space. For documents with multiple chunks, those points are averaged into a single representative location.
+
+1,024 dimensions cannot be shown on a screen, so we apply UMAP (Uniform Manifold Approximation and Projection), which compresses those 1,024 numbers down to two (x and y) while preserving as much of the original structure as possible. Documents that were close in high-dimensional space stay close on the map.
+
+The result is a semantic landscape of restoration knowledge: geography is meaning. Clusters are not labeled; they emerge from the data. When you ask a question, the documents that light up are the ones the retrieval system judged most relevant, and you can see exactly where in that landscape your answer is coming from.`;
+
+
+export default function ChatInterface({ onCitations, onFocusDoc, explanationTrigger }: Props) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [mode, setMode] = useState<ChatMode>("answer");
@@ -60,6 +73,34 @@ export default function ChatInterface({ onCitations, onFocusDoc }: Props) {
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, loading]);
+
+  // Typewriter animation for the map explanation
+  useEffect(() => {
+    if (explanationTrigger === 0) return;
+    const words = EXPLANATION.split(" ");
+    let idx = 0;
+    setMessages((m) => [
+      ...m,
+      { role: "assistant", content: "", mode: "answer", citations: [], isExplanation: true },
+    ]);
+    const timer = setInterval(() => {
+      if (idx >= words.length) {
+        clearInterval(timer);
+        return;
+      }
+      const word = words[idx];
+      idx++;
+      setMessages((prev) => {
+        const next = [...prev];
+        const last = next[next.length - 1];
+        if (!last || last.role !== "assistant") return prev;
+        const sep = last.content === "" ? "" : " ";
+        next[next.length - 1] = { ...last, content: last.content + sep + word };
+        return next;
+      });
+    }, 28);
+    return () => clearInterval(timer);
+  }, [explanationTrigger]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const send = async (question?: string) => {
     const q = (question ?? input).trim();
@@ -288,16 +329,28 @@ function MessageBubble({
   }
 
   const byId = new Map((message.citations || []).map((c) => [c.resource_id, c]));
+  const label = message.isExplanation
+    ? "About this map"
+    : message.mode === "cite"
+    ? "Bibliography"
+    : "Answer";
 
   return (
     <div className="space-y-2">
       <div className="flex items-center gap-1.5">
         <span className="text-green-600 text-[10px]">✦</span>
         <span className="text-[11px] text-stone-400 uppercase tracking-wide">
-          {message.mode === "cite" ? "Bibliography" : "Answer"}
+          {label}
         </span>
       </div>
-      {message.mode === "cite" ? (
+      {message.isExplanation ? (
+        <div className="text-stone-700 leading-relaxed text-sm whitespace-pre-wrap">
+          {message.content}
+          {message.content && !message.content.endsWith("from.") && (
+            <span className="inline-block w-0.5 h-3.5 bg-stone-400 ml-0.5 align-middle animate-pulse" />
+          )}
+        </div>
+      ) : message.mode === "cite" ? (
         <BibliographyView
           text={message.content}
           citations={message.citations || []}

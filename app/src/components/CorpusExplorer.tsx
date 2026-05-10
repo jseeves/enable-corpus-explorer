@@ -30,6 +30,7 @@ interface Props {
   citedIds: Set<string>;
   focusedDocId: string | null;
   onFocusDoc: (id: string | null) => void;
+  onRequestExplanation: () => void;
 }
 
 const PALETTE = [
@@ -54,7 +55,7 @@ function wrapText(text: string, maxChars: number): string {
   return lines.join("<br>");
 }
 
-export default function CorpusExplorer({ citedIds, focusedDocId, onFocusDoc }: Props) {
+export default function CorpusExplorer({ citedIds, focusedDocId, onFocusDoc, onRequestExplanation }: Props) {
   const [data, setData] = useState<CorpusData | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [search, setSearch] = useState("");
@@ -197,9 +198,9 @@ export default function CorpusExplorer({ citedIds, focusedDocId, onFocusDoc }: P
 
   return (
     <div className="flex flex-col h-full min-h-0">
-        {/* Search bar */}
-        <div className="shrink-0 border-b border-stone-100 px-3 py-2">
-          <div className="relative">
+        {/* Search bar + explain chip */}
+        <div className="shrink-0 border-b border-stone-100 px-3 py-2 flex items-center gap-2">
+          <div className="relative flex-1">
             <svg
               className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3 h-3 text-stone-400 pointer-events-none"
               fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}
@@ -223,6 +224,14 @@ export default function CorpusExplorer({ citedIds, focusedDocId, onFocusDoc }: P
               </button>
             )}
           </div>
+          <button
+            onClick={onRequestExplanation}
+            className="shrink-0 flex items-center gap-1.5 text-[11px] text-stone-400 hover:text-stone-700 border border-stone-200 hover:border-stone-400 rounded-full px-3 py-1.5 hover:bg-stone-50 transition whitespace-nowrap"
+            title="Explain what this map is showing"
+          >
+            <span className="text-[10px] font-semibold leading-none">?</span>
+            How does this work?
+          </button>
         </div>
 
         {/* Plot + overlays */}
