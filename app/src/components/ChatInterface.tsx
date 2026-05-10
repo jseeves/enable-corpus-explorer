@@ -357,7 +357,7 @@ function MessageBubble({
           onOpenDoc={onOpenDoc}
         />
       ) : (
-        <div className="font-serif text-stone-900 leading-relaxed text-[15px] whitespace-pre-wrap">
+        <div className="text-stone-900 leading-relaxed text-[15px] whitespace-pre-wrap">
           {renderWithCitations(message.content, byId, onOpenDoc, corpus)}
         </div>
       )}

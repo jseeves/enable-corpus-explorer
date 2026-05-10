@@ -14,7 +14,7 @@
 }
 
 body {
-  font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
+  font-family: var(--font-inter), ui-sans-serif, system-ui, -apple-system, sans-serif;
 }
 
 /* Reset Plotly's modebar default styling so it fits our palette */
