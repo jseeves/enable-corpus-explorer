@@ -49,7 +49,6 @@ export async function logToAirtable(entry: LogEntry): Promise<void> {
         "Citation Count": entry.citations.length,
         Citations: entry.citations.map((c) => c.title).join("\n"),
         "Citation IDs": entry.citations.map((c) => c.resource_id).join(", "),
-        Scores: entry.citations.map((c) => c.score.toFixed(3)).join(", "),
         "Latency (ms)": entry.latencyMs,
         Model: process.env.CLAUDE_MODEL || "unknown",
       },

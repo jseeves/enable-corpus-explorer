@@ -32,7 +32,6 @@ export async function GET() {
           "Citation Count": 0,
           Citations: "",
           "Citation IDs": "",
-          Scores: "",
           "Latency (ms)": 0,
           Model: "test",
         },
