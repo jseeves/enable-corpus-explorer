@@ -32,13 +32,6 @@ interface Props {
   onFocusDoc: (id: string | null) => void;
 }
 
-const FACET_FIELDS: Array<{ key: keyof Doc; label: string }> = [
-  { key: "document_type", label: "Doc type" },
-  { key: "phase_of_restoration", label: "Phase" },
-  { key: "target_audience", label: "Audience" },
-  { key: "region", label: "Region" },
-];
-
 const PALETTE = [
   "#166534", "#0c4a6e", "#7c2d12", "#4c1d95",
   "#831843", "#0f3460", "#155e21", "#92400e",
@@ -64,7 +57,6 @@ function wrapText(text: string, maxChars: number): string {
 export default function CorpusExplorer({ citedIds, focusedDocId, onFocusDoc }: Props) {
   const [data, setData] = useState<CorpusData | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [filters, setFilters] = useState<Record<string, Set<string>>>({});
   const [search, setSearch] = useState("");
   const [plotReady, setPlotReady] = useState(false);
   const [hasInteracted, setHasInteracted] = useState(false);
@@ -82,76 +74,24 @@ export default function CorpusExplorer({ citedIds, focusedDocId, onFocusDoc }: P
       .catch((e) => setError(e.message));
   }, []);
 
-  const facetOptions = useMemo(() => {
-    if (!data) return {};
-    const out: Record<string, string[]> = {};
-    for (const { key } of FACET_FIELDS) {
-      const set = new Set<string>();
-      for (const d of data.docs) {
-        const v = d[key];
-        if (v) set.add(String(v).split("|")[0].trim());
-      }
-      out[key] = Array.from(set).sort();
-    }
-    return out;
-  }, [data]);
-
-  const hasFilters = useMemo(
-    () => Object.values(filters).some((s) => s.size > 0),
-    [filters],
-  );
-
   const searchTerm = search.trim().toLowerCase();
   const hasSearch = searchTerm.length > 0;
   const hasCitations = citedIds.size > 0;
-  const hasHighlight = hasFilters || hasSearch;
 
-  // Compute filter+search matched set (only used when no citations active)
-  const filterMatched = useMemo(() => {
-    if (!data || !hasHighlight) return null;
+  // Search-matched set (only used when no citations active)
+  const searchMatched = useMemo(() => {
+    if (!data || !hasSearch) return null;
     const matched = new Set<string>();
     for (const doc of data.docs) {
-      let passes = true;
-      if (hasFilters) {
-        for (const [key, allowed] of Object.entries(filters)) {
-          if (allowed.size === 0) continue;
-          const v = String(doc[key as keyof Doc] || "").split("|")[0].trim();
-          if (!allowed.has(v)) { passes = false; break; }
-        }
-      }
-      if (hasSearch && !doc.title.toLowerCase().includes(searchTerm)) passes = false;
-      if (passes) matched.add(doc.resource_id);
+      if (doc.title.toLowerCase().includes(searchTerm)) matched.add(doc.resource_id);
     }
     return matched;
-  }, [data, filters, hasFilters, hasSearch, searchTerm]);
-
-  const matchedCount = hasCitations
-    ? citedIds.size
-    : filterMatched
-    ? filterMatched.size
-    : data?.n_docs ?? 0;
+  }, [data, hasSearch, searchTerm]);
 
   const focusedDoc = useMemo(() => {
     if (!data || !focusedDocId) return null;
     return data.docs.find((d) => d.resource_id === focusedDocId) ?? null;
   }, [data, focusedDocId]);
-
-  const toggleFilter = (key: string, value: string) => {
-    setFilters((prev) => {
-      const next = { ...prev };
-      const set = new Set(next[key] || []);
-      if (set.has(value)) set.delete(value);
-      else set.add(value);
-      next[key] = set;
-      return next;
-    });
-  };
-
-  const clearAll = () => {
-    setFilters({});
-    setSearch("");
-    onFocusDoc(null);
-  };
 
   if (error) {
     return (
@@ -178,7 +118,7 @@ export default function CorpusExplorer({ citedIds, focusedDocId, onFocusDoc }: P
   // ── Per-point opacity and size ────────────────────────────────────────────
   const dotOpacity = (d: Doc): number => {
     if (hasCitations) return citedIds.has(d.resource_id) ? 1.0 : 0.04;
-    if (filterMatched) return filterMatched.has(d.resource_id) ? 0.88 : 0.06;
+    if (searchMatched) return searchMatched.has(d.resource_id) ? 0.88 : 0.06;
     return 0.82;
   };
   const dotSize = (d: Doc): number => {
@@ -255,80 +195,8 @@ export default function CorpusExplorer({ citedIds, focusedDocId, onFocusDoc }: P
     });
   }
 
-  const hasAnyActive = hasHighlight || hasCitations || !!focusedDocId;
-
   return (
-    <div className="flex h-full min-h-0">
-      {/* ── Filter sidebar ─────────────────────────────────────────────────── */}
-      <aside className="w-44 shrink-0 border-r border-stone-100 overflow-y-auto flex flex-col bg-stone-50/60">
-        <div className="px-3 pt-4 pb-3 border-b border-stone-100">
-          <div className="flex items-baseline justify-between mb-1">
-            <span className="text-[11px] font-semibold text-stone-500 uppercase tracking-wide">
-              Filters
-            </span>
-            {hasAnyActive && (
-              <button
-                onClick={clearAll}
-                className="text-[10px] text-stone-400 hover:text-stone-600 transition"
-              >
-                clear
-              </button>
-            )}
-          </div>
-          <p className="text-[10px] text-stone-400 leading-relaxed">
-            {hasCitations
-              ? `${matchedCount} of ${data.n_docs} docs cited`
-              : hasHighlight
-              ? `${matchedCount} of ${data.n_docs} match`
-              : `${data.n_docs} documents`}
-          </p>
-        </div>
-
-        <div className="px-3 py-3 space-y-4 flex-1">
-          {FACET_FIELDS.map(({ key, label }) => (
-            <div key={key as string}>
-              <h3 className="text-[10px] font-semibold text-stone-400 uppercase tracking-wide mb-1">
-                {label}
-              </h3>
-              <div className="space-y-0.5">
-                {(facetOptions[key as string] || []).map((opt) => {
-                  const checked = filters[key as string]?.has(opt) || false;
-                  return (
-                    <label
-                      key={opt}
-                      className={
-                        "flex items-center gap-1.5 text-[11px] cursor-pointer rounded px-1 py-0.5 transition " +
-                        (checked
-                          ? "bg-green-50 text-green-900"
-                          : "hover:bg-stone-100 text-stone-600")
-                      }
-                    >
-                      <input
-                        type="checkbox"
-                        checked={checked}
-                        onChange={() => toggleFilter(key as string, opt)}
-                        className="rounded accent-green-700 flex-shrink-0"
-                      />
-                      <span className="truncate leading-tight">{opt}</span>
-                    </label>
-                  );
-                })}
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Mini instructions */}
-        <div className="px-3 py-3 border-t border-stone-100 space-y-1 text-[10px] text-stone-400 leading-relaxed">
-          <p><strong className="text-stone-500">Hover</strong> — see title</p>
-          <p><strong className="text-stone-500">Click</strong> — open details</p>
-          <p><strong className="text-stone-500">Legend</strong> — filter by type</p>
-          <p><strong className="text-stone-500">Scroll</strong> — zoom in/out</p>
-        </div>
-      </aside>
-
-      {/* ── Plot column ────────────────────────────────────────────────────── */}
-      <div className="flex-1 flex flex-col min-h-0">
+    <div className="flex flex-col h-full min-h-0">
         {/* Search bar */}
         <div className="shrink-0 border-b border-stone-100 px-3 py-2">
           <div className="relative">
@@ -404,13 +272,7 @@ export default function CorpusExplorer({ citedIds, focusedDocId, onFocusDoc }: P
                 if (!rid || rid.startsWith("_")) return;
                 onFocusDoc(rid === focusedDocId ? null : rid);
               }}
-              onLegendClick={(e: any) => {
-                const name = e.data?.[e.curveNumber]?.name;
-                if (name && !name.startsWith("_")) {
-                  toggleFilter("document_type", name);
-                }
-                return false;
-              }}
+              onLegendClick={() => false}
               onHover={() => {
                 if (!hasInteracted) setHasInteracted(true);
               }}
@@ -485,7 +347,6 @@ export default function CorpusExplorer({ citedIds, focusedDocId, onFocusDoc }: P
             </div>
           )}
         </div>
-      </div>
     </div>
   );
 }

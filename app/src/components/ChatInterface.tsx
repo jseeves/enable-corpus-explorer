@@ -36,22 +36,6 @@ interface Props {
   onFocusDoc: (id: string) => void;
 }
 
-const SUGGESTED = [
-  "What financial returns can investors expect from native-species reforestation?",
-  "Which restoration techniques work best in dryland and arid ecosystems?",
-  "How should local communities be engaged during restoration planning?",
-  "What monitoring indicators does WRI recommend for restoration outcomes?",
-  "How do blended finance mechanisms reduce risk for restoration investors?",
-  "What are the key differences between passive and active restoration approaches?",
-];
-
-const THEME_CHIPS = [
-  "Finance & investment",
-  "Dryland restoration",
-  "Community engagement",
-  "Monitoring & evaluation",
-  "Policy & governance",
-];
 
 export default function ChatInterface({ onCitations, onFocusDoc }: Props) {
   const [messages, setMessages] = useState<Message[]>([]);
@@ -202,7 +186,7 @@ export default function ChatInterface({ onCitations, onFocusDoc }: Props) {
       {/* Messages / welcome state */}
       <div className="flex-1 overflow-y-auto min-h-0 px-6 py-5 space-y-5">
         {isEmpty ? (
-          <WelcomeState onSuggest={(q) => send(q)} />
+          <WelcomeState />
         ) : (
           <>
             {messages.map((m, i) => (
@@ -231,7 +215,7 @@ export default function ChatInterface({ onCitations, onFocusDoc }: Props) {
             onKeyDown={handleKey}
             disabled={loading}
             rows={2}
-            placeholder="Ask a question about restoration..."
+            placeholder="Ask a question about the Enable corpus..."
             className="flex-1 bg-stone-50 border border-stone-200 rounded-lg px-4 py-3 text-sm resize-none focus:outline-none focus:ring-1 focus:ring-stone-400 placeholder:text-stone-400"
           />
           <button
@@ -266,52 +250,18 @@ export default function ChatInterface({ onCitations, onFocusDoc }: Props) {
 
 // ── Welcome state ────────────────────────────────────────────────────────────
 
-function WelcomeState({ onSuggest }: { onSuggest: (q: string) => void }) {
+function WelcomeState() {
   return (
-    <div className="flex flex-col gap-5 pt-2">
-      <div>
-        <p className="text-xs text-stone-400 uppercase tracking-widest mb-1">
-          Restoration Intelligence
-        </p>
-        <h2 className="text-lg font-semibold text-stone-900 leading-snug">
-          What would you like to know?
-        </h2>
-        <p className="text-xs text-stone-400 mt-1">
-          Answers are grounded in the indexed corpus. Cited documents light up on the map.
-        </p>
-      </div>
-
-      <div className="space-y-2">
-        {SUGGESTED.map((q) => (
-          <button
-            key={q}
-            onClick={() => onSuggest(q)}
-            className="w-full text-left text-sm text-stone-700 border border-stone-200 rounded-lg px-4 py-3 hover:border-stone-400 hover:bg-stone-50 transition"
-          >
-            {q}
-          </button>
-        ))}
-      </div>
-
-      <div className="flex items-center gap-3">
-        <div className="flex-1 h-px bg-stone-200" />
-        <span className="text-[10px] font-semibold text-stone-400 uppercase tracking-widest whitespace-nowrap">
-          Or explore by theme
-        </span>
-        <div className="flex-1 h-px bg-stone-200" />
-      </div>
-
-      <div className="flex flex-wrap gap-2">
-        {THEME_CHIPS.map((chip) => (
-          <button
-            key={chip}
-            onClick={() => onSuggest(chip)}
-            className="text-xs text-stone-600 border border-stone-300 rounded-full px-3 py-1 hover:border-stone-500 hover:text-stone-800 transition"
-          >
-            {chip}
-          </button>
-        ))}
-      </div>
+    <div className="flex flex-col justify-center h-full pb-16">
+      <p className="text-xs text-stone-400 uppercase tracking-widest mb-2">
+        Restoration Intelligence
+      </p>
+      <h2 className="text-xl font-semibold text-stone-800 leading-snug mb-2">
+        What would you like to know?
+      </h2>
+      <p className="text-sm text-stone-400 leading-relaxed max-w-sm">
+        Ask anything about the Enable corpus. Documents cited in each answer will light up on the map.
+      </p>
     </div>
   );
 }
