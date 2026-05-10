@@ -6,6 +6,7 @@ import {
   streamAnswer,
   streamBibliography,
 } from "@/lib/anthropic";
+import { logToAirtable } from "@/lib/airtable";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
@@ -31,6 +32,7 @@ export async function POST(req: NextRequest) {
   }
 
   try {
+    const startTime = Date.now();
     const candidates = await hybridRetrieve(question, { topK: 30, filters });
     const topN = mode === "cite" ? 20 : 8;
     const reranked = await rerank(question, candidates, topN);
@@ -44,8 +46,10 @@ export async function POST(req: NextRequest) {
       const encoder = new TextEncoder();
       const readable = new ReadableStream({
         async start(controller) {
+          let fullAnswer = "";
           try {
             for await (const delta of generator) {
+              fullAnswer += delta;
               controller.enqueue(
                 encoder.encode(`data: ${JSON.stringify({ type: "delta", text: delta })}\n\n`),
               );
@@ -56,6 +60,14 @@ export async function POST(req: NextRequest) {
             controller.enqueue(
               encoder.encode(`data: ${JSON.stringify({ type: "done" })}\n\n`),
             );
+            // Log to Airtable after stream completes — fire and forget
+            logToAirtable({
+              question,
+              mode,
+              answer: fullAnswer,
+              citations,
+              latencyMs: Date.now() - startTime,
+            }).catch((err) => console.error("[airtable]", err));
           } catch (err) {
             const message = err instanceof Error ? err.message : "Unknown error";
             controller.enqueue(
@@ -83,6 +95,15 @@ export async function POST(req: NextRequest) {
     } else {
       answer = await generateAnswer(question, reranked);
     }
+
+    // Log non-streaming path too
+    logToAirtable({
+      question,
+      mode,
+      answer,
+      citations,
+      latencyMs: Date.now() - startTime,
+    }).catch((err) => console.error("[airtable]", err));
 
     return NextResponse.json({ mode, answer, citations });
   } catch (err) {
