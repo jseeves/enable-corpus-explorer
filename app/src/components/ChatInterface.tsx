@@ -355,6 +355,7 @@ function MessageBubble({
           text={message.content}
           citations={message.citations || []}
           onOpenDoc={onOpenDoc}
+          corpus={corpus}
         />
       ) : (
         <div className="text-stone-900 leading-relaxed text-[15px] whitespace-pre-wrap">
@@ -406,10 +407,12 @@ function BibliographyView({
   text,
   citations,
   onOpenDoc,
+  corpus,
 }: {
   text: string;
   citations: CitationData[];
   onOpenDoc: (rid: string) => void;
+  corpus: Map<string, Doc>;
 }) {
   if (!text) return null;
   const byId = new Map(citations.map((c) => [c.resource_id, c]));
@@ -443,12 +446,19 @@ function BibliographyView({
       continue;
     }
 
-    // Entry: "- [ks_xxx] Title | Note"
-    const entryMatch = trimmed.match(/^-?\s*\[(ks_\d+)\]\s+(.*?)\s*\|\s*(.*)/);
+    // Entry: "- [ks_xxx] Title | Note"  (pipe separator)
+    // Also handle entries without a pipe (graceful fallback)
+    const entryMatch = trimmed.match(/^-?\s*\[(ks_\d+)\](.*)/);
     if (entryMatch) {
       const rid = entryMatch[1];
-      const title = entryMatch[2].trim();
-      const note = entryMatch[3].trim();
+      const rest = entryMatch[2].trim();
+      // Split on pipe if present
+      const pipeIdx = rest.indexOf("|");
+      const note = pipeIdx >= 0 ? rest.slice(pipeIdx + 1).trim() : rest;
+      // Prefer corpus map title (authoritative), fall back to whatever Claude wrote before the pipe
+      const corpusTitle = corpus.get(rid)?.title;
+      const claudeTitle = pipeIdx >= 0 ? rest.slice(0, pipeIdx).trim() : "";
+      const title = corpusTitle || claudeTitle || rid;
       const isDirect = section === "direct";
       nodes.push(
         <div key={key++} className="flex gap-3 mb-3">
@@ -460,8 +470,10 @@ function BibliographyView({
           </span>
           <div className="min-w-0">
             <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+              {/* Chip shows short ID only */}
               <Citation
                 resourceId={rid}
+                label={rid}
                 data={byId.get(rid)}
                 onOpen={() => onOpenDoc(rid)}
               />
