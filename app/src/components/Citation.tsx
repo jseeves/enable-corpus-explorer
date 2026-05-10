@@ -13,6 +13,8 @@ interface CitationData {
 interface Props {
   resourceId: string;
   data?: CitationData;
+  /** Override the chip label — e.g. pass the full doc title from the corpus map. */
+  label?: string;
   /** If provided, clicking the chip calls this instead of toggling the inline popover. */
   onOpen?: () => void;
 }
@@ -23,15 +25,12 @@ interface Props {
  * wasn't in the retrieval set — possible if hallucinated). In that case the
  * tooltip shows a "not in retrieval" warning.
  */
-export default function Citation({ resourceId, data, onOpen }: Props) {
+export default function Citation({ resourceId, data, label, onOpen }: Props) {
   const [open, setOpen] = useState(false);
   const known = !!data;
 
-  const chipLabel = known
-    ? data.title.length > 38
-      ? data.title.slice(0, 36).trimEnd() + "..."
-      : data.title
-    : resourceId;
+  const rawLabel = label ?? (known ? data.title : resourceId);
+  const chipLabel = rawLabel.length > 42 ? rawLabel.slice(0, 40).trimEnd() + "..." : rawLabel;
 
   return (
     <span className="relative inline-block">

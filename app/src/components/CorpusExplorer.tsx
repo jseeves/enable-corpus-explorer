@@ -26,8 +26,14 @@ interface CorpusData {
   n_docs: number;
 }
 
+interface Props {
+  citedIds: Set<string>;
+  focusedDocId: string | null;
+  onFocusDoc: (id: string | null) => void;
+}
+
 const FACET_FIELDS: Array<{ key: keyof Doc; label: string }> = [
-  { key: "document_type", label: "Document type" },
+  { key: "document_type", label: "Doc type" },
   { key: "phase_of_restoration", label: "Phase" },
   { key: "target_audience", label: "Audience" },
   { key: "region", label: "Region" },
@@ -55,13 +61,12 @@ function wrapText(text: string, maxChars: number): string {
   return lines.join("<br>");
 }
 
-export default function CorpusExplorer() {
+export default function CorpusExplorer({ citedIds, focusedDocId, onFocusDoc }: Props) {
   const [data, setData] = useState<CorpusData | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [selected, setSelected] = useState<Doc | null>(null);
   const [filters, setFilters] = useState<Record<string, Set<string>>>({});
   const [search, setSearch] = useState("");
-  const [plotVisible, setPlotVisible] = useState(false);
+  const [plotReady, setPlotReady] = useState(false);
   const [hasInteracted, setHasInteracted] = useState(false);
 
   useEffect(() => {
@@ -72,7 +77,7 @@ export default function CorpusExplorer() {
       })
       .then((d: CorpusData) => {
         setData(d);
-        setTimeout(() => setPlotVisible(true), 80);
+        setTimeout(() => setPlotReady(true), 100);
       })
       .catch((e) => setError(e.message));
   }, []);
@@ -98,31 +103,38 @@ export default function CorpusExplorer() {
 
   const searchTerm = search.trim().toLowerCase();
   const hasSearch = searchTerm.length > 0;
+  const hasCitations = citedIds.size > 0;
   const hasHighlight = hasFilters || hasSearch;
 
-  // Combined filter + search matching
-  const highlighted = useMemo(() => {
+  // Compute filter+search matched set (only used when no citations active)
+  const filterMatched = useMemo(() => {
     if (!data || !hasHighlight) return null;
     const matched = new Set<string>();
     for (const doc of data.docs) {
-      let passesFilter = true;
+      let passes = true;
       if (hasFilters) {
         for (const [key, allowed] of Object.entries(filters)) {
           if (allowed.size === 0) continue;
           const v = String(doc[key as keyof Doc] || "").split("|")[0].trim();
-          if (!allowed.has(v)) { passesFilter = false; break; }
+          if (!allowed.has(v)) { passes = false; break; }
         }
       }
-      const passesSearch = hasSearch
-        ? doc.title.toLowerCase().includes(searchTerm)
-        : true;
-      if (passesFilter && passesSearch) matched.add(doc.resource_id);
+      if (hasSearch && !doc.title.toLowerCase().includes(searchTerm)) passes = false;
+      if (passes) matched.add(doc.resource_id);
     }
     return matched;
   }, [data, filters, hasFilters, hasSearch, searchTerm]);
 
-  const matchedCount = highlighted ? highlighted.size : (data?.n_docs ?? 0);
+  const matchedCount = hasCitations
+    ? citedIds.size
+    : filterMatched
+    ? filterMatched.size
+    : data?.n_docs ?? 0;
 
+  const focusedDoc = useMemo(() => {
+    if (!data || !focusedDocId) return null;
+    return data.docs.find((d) => d.resource_id === focusedDocId) ?? null;
+  }, [data, focusedDocId]);
 
   const toggleFilter = (key: string, value: string) => {
     setFilters((prev) => {
@@ -138,146 +150,144 @@ export default function CorpusExplorer() {
   const clearAll = () => {
     setFilters({});
     setSearch("");
+    onFocusDoc(null);
   };
 
   if (error) {
     return (
-      <div className="rounded border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">
+      <div className="m-4 rounded border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">
         <p className="font-medium">Could not load the corpus map.</p>
         <p className="mt-1">{error}</p>
-        <p className="mt-2 text-xs">
-          Run the ingestion pipeline and copy <code>data/derived/umap.json</code> to{" "}
-          <code>app/public/umap.json</code>.
-        </p>
       </div>
     );
   }
 
   if (!data) {
-    return <div className="text-sm text-stone-500">Loading corpus map...</div>;
+    return (
+      <div className="flex items-center justify-center h-full text-sm text-stone-400">
+        Loading corpus map...
+      </div>
+    );
   }
 
   const types = Array.from(
     new Set(data.docs.map((d) => d.document_type || "unknown")),
   ).sort();
+  const typeIndex = (t: string) => types.indexOf(t);
 
-  const traces = types.flatMap((t, ti) => {
+  // ── Per-point opacity and size ────────────────────────────────────────────
+  const dotOpacity = (d: Doc): number => {
+    if (hasCitations) return citedIds.has(d.resource_id) ? 1.0 : 0.04;
+    if (filterMatched) return filterMatched.has(d.resource_id) ? 0.88 : 0.06;
+    return 0.82;
+  };
+  const dotSize = (d: Doc): number => {
+    if (hasCitations && citedIds.has(d.resource_id)) return 13;
+    return 9;
+  };
+
+  // ── Main dot traces (one per doc type) ───────────────────────────────────
+  const traces: object[] = types.map((t, ti) => {
     const color = PALETTE[ti % PALETTE.length];
     const docs = data.docs.filter((d) => (d.document_type || "unknown") === t);
-    const makeHover = (d: Doc) => wrapText(d.title, 48);
-
-    if (!hasHighlight) {
-      return [{
-        x: docs.map((d) => d.umap_x),
-        y: docs.map((d) => d.umap_y),
-        text: docs.map(makeHover),
-        customdata: docs.map((d) => d.resource_id),
-        mode: "markers" as const,
-        type: "scatter" as const,
-        name: t,
-        marker: { size: 9, color, opacity: 0.82 },
-        hoverinfo: "text" as const,
-      }];
-    }
-
-    const matched = docs.filter((d) => highlighted!.has(d.resource_id));
-    const dimmed = docs.filter((d) => !highlighted!.has(d.resource_id));
-    const out = [];
-
-    if (matched.length > 0) {
-      out.push({
-        x: matched.map((d) => d.umap_x),
-        y: matched.map((d) => d.umap_y),
-        text: matched.map(makeHover),
-        customdata: matched.map((d) => d.resource_id),
-        mode: "markers" as const,
-        type: "scatter" as const,
-        name: t,
-        marker: { size: 9, color, opacity: 0.85 },
-        hoverinfo: "text" as const,
-      });
-    }
-
-    if (dimmed.length > 0) {
-      out.push({
-        x: dimmed.map((d) => d.umap_x),
-        y: dimmed.map((d) => d.umap_y),
-        text: dimmed.map(makeHover),
-        customdata: dimmed.map((d) => d.resource_id),
-        mode: "markers" as const,
-        type: "scatter" as const,
-        name: t,
-        showlegend: false,
-        marker: { size: 7, color, opacity: 0.07 },
-        hoverinfo: "text" as const,
-      });
-    }
-
-    return out;
+    return {
+      x: docs.map((d) => d.umap_x),
+      y: docs.map((d) => d.umap_y),
+      text: docs.map((d) => wrapText(d.title, 52)),
+      customdata: docs.map((d) => d.resource_id),
+      mode: "markers",
+      type: "scatter",
+      name: t,
+      marker: {
+        size: docs.map(dotSize),
+        color,
+        opacity: docs.map(dotOpacity),
+      },
+      hoverinfo: "text",
+    };
   });
 
-  // Selection ring
-  if (selected) {
-    traces.push({
-      x: [selected.umap_x],
-      y: [selected.umap_y],
-      text: [wrapText(selected.title, 48)],
-      customdata: [selected.resource_id],
-      mode: "markers" as const,
-      type: "scatter" as const,
-      name: "_selected",
-      showlegend: false,
-      marker: {
-        size: 18,
-        color: "rgba(0,0,0,0)",
-        opacity: 1,
-        line: { color: "#1c1917", width: 2 },
-      } as any,
-      hoverinfo: "text" as const,
-    } as any);
+  // ── Citation halo rings ───────────────────────────────────────────────────
+  if (hasCitations) {
+    const citedDocs = data.docs.filter((d) => citedIds.has(d.resource_id));
+    if (citedDocs.length > 0) {
+      const haloColors = citedDocs.map(
+        (d) => PALETTE[typeIndex(d.document_type || "unknown") % PALETTE.length],
+      );
+      traces.push({
+        x: citedDocs.map((d) => d.umap_x),
+        y: citedDocs.map((d) => d.umap_y),
+        text: citedDocs.map((d) => wrapText(d.title, 52)),
+        customdata: citedDocs.map((d) => d.resource_id),
+        mode: "markers",
+        type: "scatter",
+        name: "_halos",
+        showlegend: false,
+        marker: {
+          size: 24,
+          color: haloColors.map(() => "rgba(0,0,0,0)"),
+          opacity: 1,
+          line: { color: haloColors, width: 2 },
+        },
+        hoverinfo: "text",
+      });
+    }
   }
 
-  const hasAnyActive = hasHighlight || !!selected;
+  // ── Focused doc selection ring ────────────────────────────────────────────
+  if (focusedDoc) {
+    traces.push({
+      x: [focusedDoc.umap_x],
+      y: [focusedDoc.umap_y],
+      text: [wrapText(focusedDoc.title, 52)],
+      customdata: [focusedDoc.resource_id],
+      mode: "markers",
+      type: "scatter",
+      name: "_focused",
+      showlegend: false,
+      marker: {
+        size: 30,
+        color: "rgba(0,0,0,0)",
+        opacity: 1,
+        line: { color: "#1c1917", width: 2.5 },
+      },
+      hoverinfo: "text",
+    });
+  }
+
+  const hasAnyActive = hasHighlight || hasCitations || !!focusedDocId;
 
   return (
-    <div className="bg-white rounded-xl border border-stone-200 shadow-sm overflow-hidden">
-      {/* Card header */}
-      <div className="border-b border-stone-200 px-6 py-3 flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <span className="text-green-600 text-xs leading-none">✦</span>
-          <span className="text-sm font-semibold text-stone-900">Corpus Map</span>
+    <div className="flex h-full min-h-0">
+      {/* ── Filter sidebar ─────────────────────────────────────────────────── */}
+      <aside className="w-44 shrink-0 border-r border-stone-100 overflow-y-auto flex flex-col bg-stone-50/60">
+        <div className="px-3 pt-4 pb-3 border-b border-stone-100">
+          <div className="flex items-baseline justify-between mb-1">
+            <span className="text-[11px] font-semibold text-stone-500 uppercase tracking-wide">
+              Filters
+            </span>
+            {hasAnyActive && (
+              <button
+                onClick={clearAll}
+                className="text-[10px] text-stone-400 hover:text-stone-600 transition"
+              >
+                clear
+              </button>
+            )}
+          </div>
+          <p className="text-[10px] text-stone-400 leading-relaxed">
+            {hasCitations
+              ? `${matchedCount} of ${data.n_docs} docs cited`
+              : hasHighlight
+              ? `${matchedCount} of ${data.n_docs} match`
+              : `${data.n_docs} documents`}
+          </p>
         </div>
-        {hasAnyActive && (
-          <button
-            onClick={clearAll}
-            className="text-[11px] text-stone-400 hover:text-stone-600 transition"
-          >
-            clear all
-          </button>
-        )}
-      </div>
 
-      <div className="grid grid-cols-12 gap-0">
-        {/* Filter sidebar */}
-        <aside className="col-span-2 border-r border-stone-100 px-4 py-5 space-y-5 bg-stone-50/40">
-          <div className="text-[11px] text-stone-500 leading-relaxed border-b border-stone-100 pb-4">
-            Each dot represents a document in the corpus. Positioning is preserved from embedding,
-            which chunks documents and puts those chunks in 1024-dimension vector space.
-            Hover or click to see metadata.
-          </div>
-
-          <div className="flex items-baseline justify-between">
-            <h2 className="text-xs font-medium text-stone-700">
-              Filters{" "}
-              <span className="text-stone-400 font-normal">
-                {hasHighlight ? `${matchedCount}/${data.n_docs}` : `${data.n_docs}`}
-              </span>
-            </h2>
-          </div>
-
+        <div className="px-3 py-3 space-y-4 flex-1">
           {FACET_FIELDS.map(({ key, label }) => (
             <div key={key as string}>
-              <h3 className="text-[10px] font-semibold text-stone-400 uppercase tracking-wide mb-1.5">
+              <h3 className="text-[10px] font-semibold text-stone-400 uppercase tracking-wide mb-1">
                 {label}
               </h3>
               <div className="space-y-0.5">
@@ -306,203 +316,176 @@ export default function CorpusExplorer() {
               </div>
             </div>
           ))}
-        </aside>
+        </div>
 
-        {/* Plot column */}
-        <div className="col-span-7 flex flex-col">
-          {/* Search bar */}
-          <div className="px-4 pt-3 pb-2.5 border-b border-stone-100">
-            <div className="relative">
-              <svg
-                className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-stone-400 pointer-events-none"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={2}
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-4.35-4.35m0 0A7 7 0 1 0 6.65 6.65a7 7 0 0 0 10 10Z" />
-              </svg>
-              <input
-                type="text"
-                placeholder="Search by title..."
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                className="w-full text-[12px] bg-stone-50 border border-stone-200 rounded-lg pl-8 pr-8 py-1.5 focus:outline-none focus:ring-1 focus:ring-stone-400 placeholder:text-stone-400"
-              />
-              {search && (
-                <button
-                  onClick={() => setSearch("")}
-                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-stone-400 hover:text-stone-600 text-sm leading-none"
-                  aria-label="Clear search"
-                >
-                  ×
-                </button>
-              )}
-            </div>
-          </div>
+        {/* Mini instructions */}
+        <div className="px-3 py-3 border-t border-stone-100 space-y-1 text-[10px] text-stone-400 leading-relaxed">
+          <p><strong className="text-stone-500">Hover</strong> — see title</p>
+          <p><strong className="text-stone-500">Click</strong> — open details</p>
+          <p><strong className="text-stone-500">Legend</strong> — filter by type</p>
+          <p><strong className="text-stone-500">Scroll</strong> — zoom in/out</p>
+        </div>
+      </aside>
 
-          {/* Plot with onboarding overlay */}
+      {/* ── Plot column ────────────────────────────────────────────────────── */}
+      <div className="flex-1 flex flex-col min-h-0">
+        {/* Search bar */}
+        <div className="shrink-0 border-b border-stone-100 px-3 py-2">
           <div className="relative">
-            {!hasInteracted && (
-              <div className="absolute top-3 right-3 z-10 flex items-center gap-1.5 bg-white border border-stone-200 rounded-full px-3 py-1.5 text-[11px] text-stone-500 shadow-sm pointer-events-none select-none">
-                <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse flex-shrink-0" />
-                Click any dot to explore
-              </div>
-            )}
-            <div
-              className="transition-all duration-700 ease-out"
-              style={{
-                opacity: plotVisible ? 1 : 0,
-                transform: plotVisible ? "scale(1)" : "scale(0.985)",
-              }}
+            <svg
+              className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3 h-3 text-stone-400 pointer-events-none"
+              fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}
             >
-              <Plot
-                data={traces as any}
-                layout={{
-                  autosize: true,
-                  height: 620,
-                  margin: { l: 12, r: 12, t: 12, b: 12 },
-                  xaxis: { showgrid: false, zeroline: false, showticklabels: false },
-                  yaxis: { showgrid: false, zeroline: false, showticklabels: false },
-                  legend: {
-                    orientation: "h",
-                    y: -0.02,
-                    font: {
-                      size: 10,
-                      family: "ui-sans-serif, system-ui, sans-serif",
-                    },
-                  },
-                  hovermode: "closest",
-                  hoverlabel: {
-                    bgcolor: "#1c1917",
-                    bordercolor: "#1c1917",
-                    font: {
-                      family: "ui-sans-serif, system-ui, sans-serif",
-                      size: 12,
-                      color: "#fafaf9",
-                    },
-                    align: "left",
-                  },
-                  paper_bgcolor: "white",
-                  plot_bgcolor: "#fafaf9",
-                }}
-                config={{ displayModeBar: false, responsive: true, scrollZoom: true }}
-                style={{ width: "100%" }}
-                onClick={(e: any) => {
-                  setHasInteracted(true);
-                  const rid = e.points?.[0]?.customdata;
-                  if (rid && rid !== selected?.resource_id) {
-                    const doc = data.docs.find((d) => d.resource_id === rid);
-                    if (doc) setSelected(doc);
-                  } else {
-                    setSelected(null);
-                  }
-                }}
-                onLegendClick={(e: any) => {
-                  const name = e.data?.[e.curveNumber]?.name;
-                  if (name && name !== "_selected") {
-                    toggleFilter("document_type", name);
-                  }
-                  return false;
-                }}
-                onHover={() => {
-                  if (!hasInteracted) setHasInteracted(true);
-                }}
-              />
-            </div>
+              <path strokeLinecap="round" strokeLinejoin="round"
+                d="M21 21l-4.35-4.35m0 0A7 7 0 1 0 6.65 6.65a7 7 0 0 0 10 10Z" />
+            </svg>
+            <input
+              type="text"
+              placeholder="Search by title..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="w-full text-[12px] bg-stone-50 border border-stone-200 rounded-lg pl-7 pr-7 py-1.5 focus:outline-none focus:ring-1 focus:ring-stone-400 placeholder:text-stone-400"
+            />
+            {search && (
+              <button
+                onClick={() => setSearch("")}
+                className="absolute right-2 top-1/2 -translate-y-1/2 text-stone-400 hover:text-stone-600 leading-none"
+              >
+                ×
+              </button>
+            )}
           </div>
         </div>
 
-        {/* Detail panel */}
-        <aside className="col-span-3 border-l border-stone-100 bg-stone-50/30">
-          {selected ? (
-            <div className="sticky top-[88px] p-4 space-y-3">
-              <div className="flex items-center justify-between">
-                <span className="text-[10px] font-mono text-green-800 bg-green-100 px-2 py-0.5 rounded">
-                  {selected.resource_id}
-                </span>
+        {/* Plot + overlays */}
+        <div className="flex-1 relative min-h-0">
+          {/* Plot fills the container */}
+          <div className="absolute inset-0">
+            <Plot
+              data={traces as any}
+              useResizeHandler={true}
+              layout={{
+                autosize: true,
+                margin: { l: 8, r: 8, t: 8, b: 8 },
+                xaxis: { showgrid: false, zeroline: false, showticklabels: false },
+                yaxis: { showgrid: false, zeroline: false, showticklabels: false },
+                dragmode: "pan",
+                legend: {
+                  orientation: "h",
+                  y: -0.01,
+                  font: {
+                    size: 10,
+                    family: "ui-sans-serif, system-ui, sans-serif",
+                  },
+                },
+                hovermode: "closest",
+                hoverlabel: {
+                  bgcolor: "#1c1917",
+                  bordercolor: "#1c1917",
+                  font: {
+                    family: "ui-sans-serif, system-ui, sans-serif",
+                    size: 12,
+                    color: "#fafaf9",
+                  },
+                  align: "left",
+                },
+                paper_bgcolor: "white",
+                plot_bgcolor: "#fafaf9",
+              }}
+              config={{
+                displayModeBar: false,
+                responsive: true,
+                scrollZoom: true,
+              }}
+              style={{ width: "100%", height: "100%" }}
+              onClick={(e: any) => {
+                setHasInteracted(true);
+                const rid = e.points?.[0]?.customdata;
+                if (!rid || rid.startsWith("_")) return;
+                onFocusDoc(rid === focusedDocId ? null : rid);
+              }}
+              onLegendClick={(e: any) => {
+                const name = e.data?.[e.curveNumber]?.name;
+                if (name && !name.startsWith("_")) {
+                  toggleFilter("document_type", name);
+                }
+                return false;
+              }}
+              onHover={() => {
+                if (!hasInteracted) setHasInteracted(true);
+              }}
+            />
+          </div>
+
+          {/* Onboarding cue — disappears after first interaction */}
+          {!hasInteracted && (
+            <div className="absolute top-3 right-3 z-10 flex items-center gap-1.5 bg-white border border-stone-200 rounded-full px-3 py-1.5 text-[11px] text-stone-500 shadow-sm pointer-events-none select-none">
+              <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse flex-shrink-0" />
+              Click any dot to explore
+            </div>
+          )}
+
+          {/* Citation mode badge */}
+          {hasCitations && (
+            <div className="absolute top-3 left-3 z-10 flex items-center gap-1.5 bg-white border border-stone-200 rounded-full px-3 py-1.5 text-[11px] text-stone-600 shadow-sm select-none">
+              <span className="text-green-600 text-[10px]">✦</span>
+              {citedIds.size} source{citedIds.size !== 1 ? "s" : ""} cited in last answer
+            </div>
+          )}
+
+          {/* Fade-in on load */}
+          {!plotReady && (
+            <div className="absolute inset-0 bg-white flex items-center justify-center">
+              <span className="text-sm text-stone-400">Loading map...</span>
+            </div>
+          )}
+
+          {/* Focused doc detail card — slides up from bottom */}
+          {focusedDoc && (
+            <div className="absolute bottom-0 left-0 right-0 z-20 bg-white border-t border-stone-200 shadow-lg px-5 py-4">
+              <div className="flex items-start justify-between gap-4">
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 mb-1.5">
+                    <span className="text-[10px] font-mono text-green-800 bg-green-100 px-1.5 py-0.5 rounded shrink-0">
+                      {focusedDoc.resource_id}
+                    </span>
+                    {focusedDoc.document_type && (
+                      <span className="text-[10px] bg-stone-100 text-stone-600 px-1.5 py-0.5 rounded-full shrink-0">
+                        {focusedDoc.document_type}
+                      </span>
+                    )}
+                    {focusedDoc.phase_of_restoration && (
+                      <span className="text-[10px] bg-green-50 text-green-800 px-1.5 py-0.5 rounded-full shrink-0">
+                        {focusedDoc.phase_of_restoration}
+                      </span>
+                    )}
+                    {focusedDoc.region && (
+                      <span className="text-[10px] bg-sky-50 text-sky-800 px-1.5 py-0.5 rounded-full shrink-0">
+                        {focusedDoc.region}
+                      </span>
+                    )}
+                  </div>
+                  <h3 className="text-sm font-semibold text-stone-900 leading-snug mb-1.5">
+                    {focusedDoc.title}
+                  </h3>
+                  {focusedDoc.short_summary && (
+                    <p className="text-[11px] text-stone-500 leading-relaxed line-clamp-2">
+                      {focusedDoc.short_summary}
+                    </p>
+                  )}
+                </div>
                 <button
-                  onClick={() => setSelected(null)}
-                  className="text-stone-400 hover:text-stone-700 text-lg leading-none transition"
+                  onClick={() => onFocusDoc(null)}
+                  className="text-stone-400 hover:text-stone-700 text-xl leading-none mt-0.5 shrink-0 transition"
                   aria-label="Close"
                 >
                   ×
                 </button>
               </div>
-
-              <h3 className="font-semibold text-stone-900 leading-snug text-sm">
-                {selected.title}
-              </h3>
-
-              <div className="flex flex-wrap gap-1">
-                {selected.document_type && <Badge>{selected.document_type}</Badge>}
-                {selected.phase_of_restoration && (
-                  <Badge variant="green">{selected.phase_of_restoration}</Badge>
-                )}
-                {selected.region && <Badge variant="blue">{selected.region}</Badge>}
-              </div>
-
-              {selected.short_summary && (
-                <p className="text-[11px] text-stone-600 leading-relaxed border-l-2 border-stone-200 pl-2.5">
-                  {selected.short_summary}
-                </p>
-              )}
-
-              <dl className="text-[11px] space-y-1.5">
-                <MetaField label="Audience" value={selected.target_audience} />
-                <MetaField label="Date" value={selected.publication_date} />
-                <MetaField label="Pages" value={selected.page_count ? String(selected.page_count) : ""} />
-              </dl>
-            </div>
-          ) : (
-            <div className="p-4 pt-6 space-y-3 text-[11px] text-stone-500 leading-relaxed">
-              <p>
-                <strong className="text-stone-700">Hover</strong> a dot to see its title.
-              </p>
-              <p>
-                <strong className="text-stone-700">Click</strong> to open full metadata here.
-              </p>
-              <p>
-                <strong className="text-stone-700">Search</strong> by title to highlight matches.
-              </p>
-              <p>
-                <strong className="text-stone-700">Click a legend label</strong> to filter by document type.
-              </p>
             </div>
           )}
-        </aside>
+        </div>
       </div>
-    </div>
-  );
-}
-
-function Badge({
-  children,
-  variant = "stone",
-}: {
-  children: React.ReactNode;
-  variant?: "stone" | "green" | "blue";
-}) {
-  const styles = {
-    stone: "bg-stone-100 text-stone-700",
-    green: "bg-green-50 text-green-800",
-    blue: "bg-sky-50 text-sky-800",
-  };
-  return (
-    <span
-      className={`inline-block text-[10px] px-1.5 py-0.5 rounded-full font-medium ${styles[variant]}`}
-    >
-      {children}
-    </span>
-  );
-}
-
-function MetaField({ label, value }: { label: string; value: string }) {
-  if (!value) return null;
-  return (
-    <div className="flex gap-2">
-      <dt className="text-stone-400 w-14 flex-shrink-0">{label}</dt>
-      <dd className="text-stone-700">{value}</dd>
     </div>
   );
 }

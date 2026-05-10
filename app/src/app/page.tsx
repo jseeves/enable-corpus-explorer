@@ -4,17 +4,15 @@ import { useState } from "react";
 import CorpusExplorer from "@/components/CorpusExplorer";
 import ChatInterface from "@/components/ChatInterface";
 
-type Tab = "explorer" | "chat";
-
 export default function Home() {
-  const [tab, setTab] = useState<Tab>("explorer");
+  const [citedIds, setCitedIds] = useState<Set<string>>(new Set());
+  const [focusedDocId, setFocusedDocId] = useState<string | null>(null);
 
   return (
-    <div className="min-h-screen bg-stone-100">
-      <div className="sticky top-0 z-50">
-      {/* Global header */}
-      <header className="bg-white border-b border-stone-200">
-        <div className="max-w-7xl mx-auto px-7 h-12 flex items-center justify-between">
+    <div className="flex flex-col h-screen bg-white overflow-hidden">
+      {/* Sticky header */}
+      <header className="shrink-0 bg-white border-b border-stone-200 h-12 flex items-center">
+        <div className="w-full px-6 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-px h-5 bg-green-700" />
             <span className="font-semibold text-stone-900 text-[15px] tracking-tight">
@@ -31,58 +29,28 @@ export default function Home() {
         </div>
       </header>
 
-      {/* Tab nav */}
-      <div className="bg-white border-b border-stone-200">
-        <div className="max-w-7xl mx-auto px-7">
-          <nav className="flex items-center gap-2 h-11">
-            <TabLink active={tab === "explorer"} onClick={() => setTab("explorer")}>
-              Corpus Map
-            </TabLink>
-            <TabLink active={tab === "chat"} onClick={() => setTab("chat")} showIcon>
-              Ask the Corpus
-            </TabLink>
-          </nav>
+      {/* Two-panel split — fills remaining viewport */}
+      <div className="flex flex-1 min-h-0">
+        {/* Left: visualization */}
+        <div className="w-[58%] border-r border-stone-200 flex flex-col min-h-0">
+          <CorpusExplorer
+            citedIds={citedIds}
+            focusedDocId={focusedDocId}
+            onFocusDoc={setFocusedDocId}
+          />
+        </div>
+
+        {/* Right: chat */}
+        <div className="flex-1 flex flex-col min-h-0">
+          <ChatInterface
+            onCitations={(ids) => {
+              setCitedIds(new Set(ids));
+              setFocusedDocId(null);
+            }}
+            onFocusDoc={setFocusedDocId}
+          />
         </div>
       </div>
-
-      </div>
-      {/* Content */}
-      <main className="max-w-7xl mx-auto px-7 py-7">
-        {tab === "explorer" && <CorpusExplorer />}
-        {tab === "chat" && <ChatInterface />}
-      </main>
     </div>
-  );
-}
-
-function TabLink({
-  active,
-  children,
-  onClick,
-  showIcon = false,
-}: {
-  active: boolean;
-  children: React.ReactNode;
-  onClick: () => void;
-  showIcon?: boolean;
-}) {
-  if (active) {
-    return (
-      <button
-        onClick={onClick}
-        className="flex items-center gap-1.5 px-3.5 py-1 text-sm font-medium text-stone-900 border border-stone-800 rounded-full transition"
-      >
-        {showIcon && <span className="text-green-600 text-xs leading-none">✦</span>}
-        {children}
-      </button>
-    );
-  }
-  return (
-    <button
-      onClick={onClick}
-      className="px-3.5 py-1 text-sm text-stone-500 hover:text-stone-800 transition"
-    >
-      {children}
-    </button>
   );
 }
