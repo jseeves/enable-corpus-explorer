@@ -416,40 +416,74 @@ function BibliographyView({
   const lines = text.split("\n");
   const nodes: React.ReactNode[] = [];
   let key = 0;
+  let section: "direct" | "background" = "direct";
 
   for (const line of lines) {
     const trimmed = line.trim();
-    if (!trimmed) {
-      nodes.push(<div key={key++} className="h-2" />);
-      continue;
-    }
-    if (/^(direct|background)/i.test(trimmed)) {
+    if (!trimmed) continue;
+
+    if (/^direct/i.test(trimmed)) {
+      section = "direct";
       nodes.push(
-        <p key={key++} className="text-[11px] font-semibold text-stone-400 uppercase tracking-wide mt-3 mb-1">
-          {trimmed.replace(/:$/, "")}
-        </p>,
+        <p key={key++} className="text-[11px] font-semibold text-stone-400 uppercase tracking-widest mb-2">
+          Direct
+        </p>
       );
       continue;
     }
-    const entryMatch = trimmed.match(/^-\s*\[(ks_\d+)\]\s*[^\w]*(.*)/);
+    if (/^background/i.test(trimmed)) {
+      section = "background";
+      // Add a little breathing room before Background section
+      nodes.push(<div key={key++} className="mt-4" />);
+      nodes.push(
+        <p key={key++} className="text-[11px] font-semibold text-stone-400 uppercase tracking-widest mb-2">
+          Background
+        </p>
+      );
+      continue;
+    }
+
+    // Entry: "- [ks_xxx] Title | Note"
+    const entryMatch = trimmed.match(/^-?\s*\[(ks_\d+)\]\s+(.*?)\s*\|\s*(.*)/);
     if (entryMatch) {
       const rid = entryMatch[1];
-      const rest = entryMatch[2];
+      const title = entryMatch[2].trim();
+      const note = entryMatch[3].trim();
+      const isDirect = section === "direct";
       nodes.push(
-        <div key={key++} className="flex gap-2 mb-1.5">
-          <span className="flex-shrink-0">
-            <Citation
-              resourceId={rid}
-              data={byId.get(rid)}
-              onOpen={() => onOpenDoc(rid)}
-            />
+        <div key={key++} className="flex gap-3 mb-3">
+          <span
+            className="mt-[3px] flex-shrink-0 text-[10px] leading-none"
+            style={{ color: isDirect ? "#16a34a" : "#a8a29e" }}
+          >
+            ●
           </span>
-          <span className="text-stone-700 text-sm">{rest}</span>
+          <div className="min-w-0">
+            <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+              <Citation
+                resourceId={rid}
+                data={byId.get(rid)}
+                onOpen={() => onOpenDoc(rid)}
+              />
+              <span className="text-sm font-medium text-stone-800 leading-snug">
+                {title}
+              </span>
+            </div>
+            {note && (
+              <p className="mt-0.5 text-xs text-stone-500 leading-relaxed">
+                {note}
+              </p>
+            )}
+          </div>
         </div>,
       );
       continue;
     }
-    nodes.push(<p key={key++} className="text-sm text-stone-700">{trimmed}</p>);
+
+    // Fallback: plain text line (e.g. "No directly relevant documents…")
+    nodes.push(
+      <p key={key++} className="text-sm text-stone-500 italic">{trimmed}</p>
+    );
   }
-  return <>{nodes}</>;
+  return <div className="pt-1">{nodes}</div>;
 }
