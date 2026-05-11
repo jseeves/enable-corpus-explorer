@@ -30,7 +30,6 @@ interface Props {
   citedIds: Set<string>;
   focusedDocId: string | null;
   onFocusDoc: (id: string | null) => void;
-  onRequestExplanation: () => void;
 }
 
 const PALETTE = [
@@ -55,7 +54,7 @@ function wrapText(text: string, maxChars: number): string {
   return lines.join("<br>");
 }
 
-export default function CorpusExplorer({ citedIds, focusedDocId, onFocusDoc, onRequestExplanation }: Props) {
+export default function CorpusExplorer({ citedIds, focusedDocId, onFocusDoc }: Props) {
   const [data, setData] = useState<CorpusData | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [search, setSearch] = useState("");
@@ -224,14 +223,6 @@ export default function CorpusExplorer({ citedIds, focusedDocId, onFocusDoc, onR
               </button>
             )}
           </div>
-          <button
-            onClick={onRequestExplanation}
-            className="shrink-0 flex items-center gap-1.5 text-[11px] text-stone-400 hover:text-stone-700 border border-stone-200 hover:border-stone-400 rounded-full px-3 py-1.5 hover:bg-stone-50 transition whitespace-nowrap"
-            title="Explain what this map is showing"
-          >
-            <span className="text-[10px] font-semibold leading-none">?</span>
-            How does this work?
-          </button>
         </div>
 
         {/* Plot + overlays */}

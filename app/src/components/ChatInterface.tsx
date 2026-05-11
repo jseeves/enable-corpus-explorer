@@ -39,15 +39,13 @@ interface Props {
 }
 
 const EXPLANATION =
-`Each dot on this map is one of the 92 documents in the Enable corpus: guides, research papers, policy briefs, and field reports on landscape restoration.
+`Each dot on the map to the left represents one of the 92 documents in the Enable corpus. Among these are guides, research papers, policy briefs, and field reports on enabling effective and equitable landscape restoration.
 
-To position each document in space, it is converted into an embedding: a list of 1,024 numbers that captures its meaning, not just its keywords. Think of it as a semantic fingerprint. Documents covering similar ideas produce similar fingerprints; dissimilar ones diverge.
+To position each document in the space, it is converted into an embedding: a list of 1,024 numbers that serves as a sort of semantic fingerprint. Documents covering similar ideas produce similar fingerprints, while dissimilar ones diverge.
 
-Each document is first broken into overlapping chunks of roughly 400 words. Each chunk is passed through Voyage AI's embedding model, which encodes it into a point in 1,024-dimensional space. For documents with multiple chunks, those points are averaged into a single representative location.
+1,024 dimensions cannot be shown on a screen, so UMAP (Uniform Manifold Approximation and Projection) is applied, which compresses those 1,024 numbers down to two (x and y) while preserving as much of the original structure as possible. Documents that were close in high-dimensional space stay close on this map.
 
-1,024 dimensions cannot be shown on a screen, so we apply UMAP (Uniform Manifold Approximation and Projection), which compresses those 1,024 numbers down to two (x and y) while preserving as much of the original structure as possible. Documents that were close in high-dimensional space stay close on the map.
-
-The result is a semantic landscape of restoration knowledge: geography is meaning. Clusters are not labeled; they emerge from the data. When you ask a question, the documents that light up are the ones the retrieval system judged most relevant, and you can see exactly where in that landscape your answer is coming from.`;
+The result is a semantic landscape of the Enable team's knowledge, where, in essence, coordinates correlates with meaning. When you ask a question, the documents that light up are the ones the retrieval system judged most relevant, and you can see exactly where in the Enable corpus your answer is coming from.`;
 
 
 export default function ChatInterface({ onCitations, onFocusDoc, explanationTrigger }: Props) {
@@ -307,6 +305,15 @@ function WelcomeState() {
   );
 }
 
+function renderExplanationText(text: string): React.ReactNode {
+  const parts = text.split(/(__[^_]+__)/g);
+  return parts.map((part, i) => {
+    const match = part.match(/^__([^_]+)__$/);
+    if (match) return <strong key={i}><em>{match[1]}</em></strong>;
+    return part;
+  });
+}
+
 // ── Message bubbles ──────────────────────────────────────────────────────────
 
 function MessageBubble({
@@ -345,7 +352,7 @@ function MessageBubble({
       </div>
       {message.isExplanation ? (
         <div className="text-stone-700 leading-relaxed text-sm whitespace-pre-wrap">
-          {message.content}
+          {renderExplanationText(message.content)}
           {message.content && !message.content.endsWith("from.") && (
             <span className="inline-block w-0.5 h-3.5 bg-stone-400 ml-0.5 align-middle animate-pulse" />
           )}

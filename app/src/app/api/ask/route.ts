@@ -7,6 +7,7 @@ import {
   streamBibliography,
 } from "@/lib/anthropic";
 import { logToAirtable } from "@/lib/airtable";
+import { notifySlack } from "@/lib/slack";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
@@ -60,14 +61,10 @@ export async function POST(req: NextRequest) {
             controller.enqueue(
               encoder.encode(`data: ${JSON.stringify({ type: "done" })}\n\n`),
             );
-            // Log to Airtable after stream completes — fire and forget
-            logToAirtable({
-              question,
-              mode,
-              answer: fullAnswer,
-              citations,
-              latencyMs: Date.now() - startTime,
-            }).catch((err) => console.error("[airtable]", err));
+            // Log after stream completes — fire and forget
+            const logEntry = { question, mode, answer: fullAnswer, citations, latencyMs: Date.now() - startTime };
+            logToAirtable(logEntry).catch((err) => console.error("[airtable]", err));
+            notifySlack(logEntry).catch((err) => console.error("[slack]", err));
           } catch (err) {
             const message = err instanceof Error ? err.message : "Unknown error";
             controller.enqueue(
@@ -97,13 +94,9 @@ export async function POST(req: NextRequest) {
     }
 
     // Log non-streaming path too
-    logToAirtable({
-      question,
-      mode,
-      answer,
-      citations,
-      latencyMs: Date.now() - startTime,
-    }).catch((err) => console.error("[airtable]", err));
+    const logEntry = { question, mode, answer, citations, latencyMs: Date.now() - startTime };
+    logToAirtable(logEntry).catch((err) => console.error("[airtable]", err));
+    notifySlack(logEntry).catch((err) => console.error("[slack]", err));
 
     return NextResponse.json({ mode, answer, citations });
   } catch (err) {
