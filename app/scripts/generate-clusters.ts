@@ -132,6 +132,29 @@ async function labelCluster(client: Anthropic, docs: Doc[], idx: number) {
   };
 }
 
+async function extractKeyItems(client: Anthropic, docs: Doc[], clusterLabel: string): Promise<string[]> {
+  const entries = docs.map((d, i) =>
+    `${i + 1}. "${d.title}": ${d.short_summary || "(no summary)"}`
+  ).join("\n");
+
+  const res = await client.messages.create({
+    model: "claude-haiku-4-5-20251001",
+    max_tokens: 400,
+    messages: [{
+      role: "user",
+      content:
+        `The following documents are grouped under the theme "${clusterLabel}" in a landscape restoration knowledge corpus.\n\n` +
+        `Documents:\n${entries}\n\n` +
+        `List the specific cases, examples, instruments, mechanisms, or approaches that are actually discussed across these documents. ` +
+        `Be concrete and named — not general categories, but the actual things: specific programs, tools, methods, policies, or examples. ` +
+        `One item per line. No bullets, numbers, or headers. 8–14 items.`,
+    }],
+  });
+
+  const text = res.content[0].type === "text" ? res.content[0].text : "";
+  return text.split("\n").map(l => l.trim()).filter(l => l.length > 0);
+}
+
 async function main() {
   const { docs }: { docs: Doc[] } = JSON.parse(
     readFileSync(join(__dirname, "../public/umap.json"), "utf-8")
@@ -161,16 +184,23 @@ async function main() {
       .sort((a, b) => dist2([a.umap_x, a.umap_y], centroids[i]) - dist2([b.umap_x, b.umap_y], centroids[i]))
   );
 
-  // Label via Haiku (parallel)
-  console.log("\nLabeling clusters...");
+  // Label and extract key items via Haiku (parallel)
+  console.log("\nLabeling clusters and extracting key items...");
   const client = new Anthropic();
   const labelResults = await Promise.all(clusterDocs.map((d, i) => labelCluster(client, d, i)));
   labelResults.forEach((r, i) => console.log(`  Cluster ${i}: "${r.label}"`));
+
+  console.log("\nExtracting key items...");
+  const keyItemResults = await Promise.all(
+    clusterDocs.map((d, i) => extractKeyItems(client, d, labelResults[i].label))
+  );
+  keyItemResults.forEach((items, i) => console.log(`  Cluster ${i}: ${items.length} items`));
 
   const clusters = clusterDocs.map((docList, i) => ({
     id: i,
     label: labelResults[i].label,
     description: labelResults[i].description,
+    key_items: keyItemResults[i],
     color: COLORS[i % COLORS.length],
     centroid_x: centroids[i][0],
     centroid_y: centroids[i][1],
