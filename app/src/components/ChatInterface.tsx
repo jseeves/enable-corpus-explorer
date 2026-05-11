@@ -39,13 +39,15 @@ interface Props {
 }
 
 const EXPLANATION =
-`Each dot on the map to the left represents one of the 92 documents in the Enable corpus. Among these are guides, research papers, policy briefs, and field reports on enabling effective and equitable landscape restoration.
+`Each dot on the map to the left represents one of the 92 documents in the Enable corpus. Among these are guides, research papers, policy briefs, and field reports on enabling effective and equitable restoration.
 
-To position each document in the space, it is converted into an embedding: a list of 1,024 numbers that serves as a sort of semantic fingerprint. Documents covering similar ideas produce similar fingerprints, while dissimilar ones diverge.
+When you ask a question, the system needs to find the most relevant passages across all 92 documents, but reading through every document from scratch each time would be slow and resource-intensive. Instead, each document is converted in advance into an embedding: a list of 1,024 numbers that serves as a sort of semantic fingerprint. This allows the system to instantly compare your question against the entire corpus mathematically, surfacing the most relevant material in milliseconds rather than minutes.
+
+Documents covering similar ideas produce similar fingerprints, while dissimilar ones diverge. The embeddings system, wired up as it is to a vector database that stores the textual corpus as mathematical representations, efficiently finds the most relevant passages and hands them to the AI, which synthesizes them into a response. This way, the answer you receive is guaranteed to always be grounded in the corpus.
 
 1,024 dimensions cannot be shown on a screen, so UMAP (Uniform Manifold Approximation and Projection) is applied, which compresses those 1,024 numbers down to two (x and y) while preserving as much of the original structure as possible. Documents that were close in high-dimensional space stay close on this map.
 
-The result is a semantic landscape of the Enable team's knowledge, where, in essence, coordinates correlates with meaning. When you ask a question, the documents that light up are the ones the retrieval system judged most relevant, and you can see exactly where in the Enable corpus your answer is coming from.`;
+The result is a semantic landscape of the Enable team's knowledge, where, in essence, coordinates correlate with meaning. When you ask a question, the documents that light up are the ones the retrieval system judged most relevant, and you can see exactly where in the Enable corpus your answer is coming from.`;
 
 
 export default function ChatInterface({ onCitations, onFocusDoc, explanationTrigger }: Props) {
