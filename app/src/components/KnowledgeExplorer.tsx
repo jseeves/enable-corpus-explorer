@@ -32,6 +32,24 @@ interface ClusterData {
   clusters: Cluster[];
 }
 
+function renderItemWithCitations(item: string): React.ReactNode {
+  const parts = item.split(/(\[ks_\d+(?:,\s*ks_\d+)*\])/g);
+  return parts.map((part, i) => {
+    const match = part.match(/^\[(ks_\d+(?:,\s*ks_\d+)*)\]$/);
+    if (match) {
+      return match[1].split(",").map((id, j) => (
+        <span
+          key={`${i}-${j}`}
+          className="inline-block text-[9px] font-mono text-green-800 bg-green-50 border border-green-200 px-1 py-0.5 rounded mx-0.5 align-middle"
+        >
+          {id.trim()}
+        </span>
+      ));
+    }
+    return part;
+  });
+}
+
 function wrapText(text: string, maxChars: number): string {
   const words = text.split(" ");
   const lines: string[] = [];
@@ -229,7 +247,7 @@ export default function KnowledgeExplorer() {
                         {cluster.key_items.map((item, i) => (
                           <li key={i} className="flex items-start gap-2">
                             <span className="mt-[5px] w-1 h-1 rounded-full flex-shrink-0" style={{ backgroundColor: cluster.color }} />
-                            <span className="text-[12px] text-stone-700 leading-snug">{item}</span>
+                            <span className="text-[12px] text-stone-700 leading-snug">{renderItemWithCitations(item)}</span>
                           </li>
                         ))}
                       </ul>

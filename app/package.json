@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "type-check": "tsc --noEmit",
-    "generate-clusters": "tsx scripts/generate-clusters.ts"
+    "generate-clusters": "tsx scripts/generate-clusters.ts",
+    "enrich-key-items": "tsx scripts/enrich-key-items.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.32.0",
