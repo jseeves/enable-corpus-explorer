@@ -5,6 +5,8 @@ import {
   generateBibliography,
   streamAnswer,
   streamBibliography,
+  rewriteQuery,
+  type ConversationTurn,
 } from "@/lib/anthropic";
 import { logToAirtable } from "@/lib/airtable";
 import { notifySlack } from "@/lib/slack";
@@ -17,6 +19,7 @@ interface AskBody {
   mode?: "answer" | "cite";
   stream?: boolean;
   filters?: Record<string, string | string[]>;
+  history?: ConversationTurn[];
 }
 
 export async function POST(req: NextRequest) {
@@ -27,14 +30,18 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
   }
 
-  const { question, mode = "answer", stream: wantStream = false, filters = {} } = body;
+  const { question, mode = "answer", stream: wantStream = false, filters = {}, history = [] } = body;
   if (!question || typeof question !== "string") {
     return NextResponse.json({ error: "Missing 'question'" }, { status: 400 });
   }
 
   try {
     const startTime = Date.now();
-    const candidates = await hybridRetrieve(question, { topK: 30, filters });
+    const resolvedQuestion = await rewriteQuery(question, history.slice(-3));
+    if (resolvedQuestion !== question) {
+      console.log(`[rewrite] "${question}" → "${resolvedQuestion}"`);
+    }
+    const candidates = await hybridRetrieve(resolvedQuestion, { topK: 30, filters });
     const topN = mode === "cite" ? 20 : 8;
     const reranked = await rerank(question, candidates, topN);
     const citations = dedupeByResourceId(reranked);

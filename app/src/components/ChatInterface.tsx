@@ -107,6 +107,18 @@ export default function ChatInterface({ onCitations, onFocusDoc, explanationTrig
     setError(null);
     setInput("");
     onCitations([]); // clear citation highlights while new answer is in flight
+
+    // Collect recent Q&A pairs for query rewriting (exclude explanation messages)
+    const history: Array<{ question: string; answer: string }> = [];
+    const snap = messages; // snapshot before state update
+    for (let i = 0; i < snap.length - 1; i++) {
+      const cur = snap[i];
+      const next = snap[i + 1];
+      if (cur.role === "user" && next?.role === "assistant" && next.content && !next.isExplanation) {
+        history.push({ question: cur.content, answer: next.content.slice(0, 400) });
+      }
+    }
+
     setMessages((m) => [...m, { role: "user", content: q }]);
     setLoading(true);
     setMessages((m) => [...m, { role: "assistant", content: "", mode, citations: [] }]);
@@ -115,7 +127,7 @@ export default function ChatInterface({ onCitations, onFocusDoc, explanationTrig
       const res = await fetch("/api/ask", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ question: q, mode, stream: true }),
+        body: JSON.stringify({ question: q, mode, stream: true, history: history.slice(-3) }),
       });
 
       if (!res.ok) {

@@ -24,6 +24,38 @@ function getClient() {
 }
 
 const MODEL = process.env.CLAUDE_MODEL || "claude-sonnet-4-5";
+const REWRITE_MODEL = "claude-haiku-4-5-20251001";
+
+export interface ConversationTurn {
+  question: string;
+  answer: string;
+}
+
+export async function rewriteQuery(
+  question: string,
+  history: ConversationTurn[],
+): Promise<string> {
+  if (history.length === 0) return question;
+
+  const turns = history
+    .map((t, i) => `Q${i + 1}: ${t.question}\nA${i + 1}: ${t.answer}`)
+    .join("\n\n");
+
+  const prompt =
+    `Recent conversation:\n${turns}\n\n` +
+    `New question: "${question}"\n\n` +
+    `Rewrite the new question as a fully self-contained search query, resolving any pronouns or vague references (like "here", "this", "these", "it") using the conversation context. ` +
+    `If the question is already self-contained, return it unchanged. Return ONLY the rewritten query, no explanation.`;
+
+  const response = await getClient().messages.create({
+    model: REWRITE_MODEL,
+    max_tokens: 150,
+    messages: [{ role: "user", content: prompt }],
+  });
+
+  const block = response.content[0];
+  return block.type === "text" ? block.text.trim() : question;
+}
 
 export async function generateAnswer(question: string, chunks: RetrievedChunk[]): Promise<string> {
   if (chunks.length === 0) {
