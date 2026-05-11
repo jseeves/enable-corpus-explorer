@@ -3,12 +3,16 @@
 import { useState } from "react";
 import CorpusExplorer from "@/components/CorpusExplorer";
 import ChatInterface from "@/components/ChatInterface";
+import KnowledgeExplorer from "@/components/KnowledgeExplorer";
+
+type View = "explorer" | "knowledge";
 
 export default function Home() {
   const [citedIds, setCitedIds] = useState<Set<string>>(new Set());
   const [focusedDocId, setFocusedDocId] = useState<string | null>(null);
   const [lastQuery, setLastQuery] = useState("");
   const [explanationTrigger] = useState(1);
+  const [view, setView] = useState<View>("explorer");
 
   return (
     <div className="flex flex-col h-screen bg-white overflow-hidden">
@@ -24,33 +28,57 @@ export default function Home() {
               v0 prototype
             </span>
           </div>
+          {/* Tab toggle */}
+          <div className="flex items-center gap-1 bg-stone-100 rounded-lg p-1">
+            {(["explorer", "knowledge"] as View[]).map(v => (
+              <button
+                key={v}
+                onClick={() => setView(v)}
+                className={
+                  "px-3 py-1 rounded-md text-xs font-medium transition " +
+                  (view === v
+                    ? "bg-white text-stone-900 shadow-sm"
+                    : "text-stone-500 hover:text-stone-700")
+                }
+              >
+                {v === "explorer" ? "Corpus Explorer" : "Knowledge Map"}
+              </button>
+            ))}
+          </div>
         </div>
       </header>
 
-      {/* Two-panel split — fills remaining viewport */}
+      {/* Main content */}
       <div className="flex flex-1 min-h-0">
-        {/* Left: visualization */}
-        <div className="w-[58%] border-r border-stone-200 flex flex-col min-h-0">
-          <CorpusExplorer
-            citedIds={citedIds}
-            focusedDocId={focusedDocId}
-            onFocusDoc={setFocusedDocId}
-            lastQuery={lastQuery}
-          />
-        </div>
-
-        {/* Right: chat */}
-        <div className="flex-1 flex flex-col min-h-0">
-          <ChatInterface
-            onCitations={(ids, question) => {
-              setCitedIds(new Set(ids));
-              setFocusedDocId(null);
-              if (question) setLastQuery(question);
-            }}
-            onFocusDoc={setFocusedDocId}
-            explanationTrigger={explanationTrigger}
-          />
-        </div>
+        {view === "explorer" ? (
+          <>
+            {/* Left: visualization */}
+            <div className="w-[58%] border-r border-stone-200 flex flex-col min-h-0">
+              <CorpusExplorer
+                citedIds={citedIds}
+                focusedDocId={focusedDocId}
+                onFocusDoc={setFocusedDocId}
+                lastQuery={lastQuery}
+              />
+            </div>
+            {/* Right: chat */}
+            <div className="flex-1 flex flex-col min-h-0">
+              <ChatInterface
+                onCitations={(ids, question) => {
+                  setCitedIds(new Set(ids));
+                  setFocusedDocId(null);
+                  if (question) setLastQuery(question);
+                }}
+                onFocusDoc={setFocusedDocId}
+                explanationTrigger={explanationTrigger}
+              />
+            </div>
+          </>
+        ) : (
+          <div className="flex-1 flex flex-col min-h-0">
+            <KnowledgeExplorer />
+          </div>
+        )}
       </div>
     </div>
   );
