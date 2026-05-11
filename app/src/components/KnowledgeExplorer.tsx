@@ -50,6 +50,11 @@ function renderItemWithCitations(item: string): React.ReactNode {
   });
 }
 
+function truncateWords(text: string, max: number): string {
+  const words = text.split(" ");
+  return words.length <= max ? text : words.slice(0, max).join(" ") + "…";
+}
+
 function wrapText(text: string, maxChars: number): string {
   const words = text.split(" ");
   const lines: string[] = [];
@@ -70,7 +75,6 @@ export default function KnowledgeExplorer() {
   const [clusterData, setClusterData] = useState<ClusterData | null>(null);
   const [docs, setDocs] = useState<Doc[]>([]);
   const [selected, setSelected] = useState<number | null>(null);
-  const [expanded, setExpanded] = useState<Set<number>>(new Set());
   const [plotReady, setPlotReady] = useState(false);
   const [docMap, setDocMap] = useState<Map<string, Doc>>(new Map());
 
@@ -123,7 +127,7 @@ export default function KnowledgeExplorer() {
     text: cluster.label,
     showarrow: false,
     font: {
-      size: selected === null || selected === cluster.id ? 10 : 8,
+      size: selected === null || selected === cluster.id ? 13 : 9,
       color: selected === null || selected === cluster.id ? cluster.color : "#d4d0cb",
       family: "ui-sans-serif, system-ui, sans-serif",
     },
@@ -224,7 +228,7 @@ export default function KnowledgeExplorer() {
                   />
                   <div className="flex-1 px-4 py-3 min-w-0">
                     {/* Header */}
-                    <div className="flex items-start justify-between gap-2 mb-1">
+                    <div className="flex items-start justify-between gap-2 mb-0.5">
                       <span className="text-sm font-semibold text-stone-900 leading-snug">
                         {cluster.label}
                       </span>
@@ -236,59 +240,44 @@ export default function KnowledgeExplorer() {
                       </span>
                     </div>
                     {cluster.description && (
-                      <p className="text-xs text-stone-500 leading-relaxed mb-2.5">
-                        {cluster.description}
+                      <p className="text-xs text-stone-500 leading-relaxed mb-3">
+                        {truncateWords(cluster.description, 10)}
                       </p>
                     )}
 
-                    {/* Key items */}
-                    {cluster.key_items?.length > 0 && (
-                      <ul className="space-y-1 mb-3">
-                        {cluster.key_items.map((item, i) => (
-                          <li key={i} className="flex items-start gap-2">
-                            <span className="mt-[5px] w-1 h-1 rounded-full flex-shrink-0" style={{ backgroundColor: cluster.color }} />
-                            <span className="text-[12px] text-stone-700 leading-snug">{renderItemWithCitations(item)}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    )}
+                    {/* Two-column body */}
+                    <div className="grid grid-cols-2 gap-4">
+                      {/* Left: key items */}
+                      <div>
+                        <p className="text-[10px] font-semibold text-stone-400 uppercase tracking-widest mb-1.5">Topics & Cases</p>
+                        <ul className="space-y-1.5">
+                          {cluster.key_items?.map((item, i) => (
+                            <li key={i} className="flex items-start gap-2">
+                              <span className="mt-[5px] w-1 h-1 rounded-full flex-shrink-0" style={{ backgroundColor: cluster.color }} />
+                              <span className="text-[11px] text-stone-700 leading-snug">{renderItemWithCitations(item)}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
 
-                    {/* Collapsible source documents */}
-                    <button
-                      onClick={e => {
-                        e.stopPropagation();
-                        setExpanded(prev => {
-                          const next = new Set(prev);
-                          next.has(cluster.id) ? next.delete(cluster.id) : next.add(cluster.id);
-                          return next;
-                        });
-                      }}
-                      className="text-[10px] text-stone-400 hover:text-stone-600 transition flex items-center gap-1"
-                    >
-                      <span>{expanded.has(cluster.id) ? "▾" : "▸"}</span>
-                      {cluster.doc_ids.length} source document{cluster.doc_ids.length !== 1 ? "s" : ""}
-                    </button>
-
-                    {expanded.has(cluster.id) && (
-                      <ul className="mt-2 space-y-2">
-                        {cluster.doc_ids.map(id => {
-                          const doc = docMap.get(id);
-                          return doc ? (
-                            <li key={id} className="space-y-0.5">
-                              <div className="flex items-center gap-1.5 flex-wrap">
-                                <span className="text-[10px] font-mono text-green-800 bg-green-50 border border-green-200 px-1.5 py-0.5 rounded flex-shrink-0">
+                      {/* Right: document titles */}
+                      <div>
+                        <p className="text-[10px] font-semibold text-stone-400 uppercase tracking-widest mb-1.5">Source Documents</p>
+                        <ul className="space-y-1.5">
+                          {cluster.doc_ids.map(id => {
+                            const doc = docMap.get(id);
+                            return doc ? (
+                              <li key={id} className="flex items-start gap-1.5">
+                                <span className="text-[10px] font-mono text-green-800 bg-green-50 border border-green-200 px-1 py-0.5 rounded flex-shrink-0 mt-0.5">
                                   {doc.resource_id}
                                 </span>
-                                <span className="text-[11px] font-medium text-stone-800 leading-snug">{doc.title}</span>
-                              </div>
-                              {doc.short_summary && (
-                                <p className="text-[11px] text-stone-500 leading-relaxed pl-0.5">{doc.short_summary}</p>
-                              )}
-                            </li>
-                          ) : null;
-                        })}
-                      </ul>
-                    )}
+                                <span className="text-[11px] text-stone-700 leading-snug">{doc.title}</span>
+                              </li>
+                            ) : null;
+                          })}
+                        </ul>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </button>
