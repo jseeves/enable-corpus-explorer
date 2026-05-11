@@ -45,7 +45,7 @@ To provide effective responses, the system needs to find the most relevant infor
 
 Since 1,024 dimensions cannot be shown on a screen, the visualization displays those semantic fingerprints in two dimensions (x and y) while preserving as much of the original structure as possible. Documents that were close in high-dimensional space remain neighbors on the map.
 
-The result is a semantic landscape of the Enable team's knowledge. When you ask a question, the documents that light up are the ones the retrieval system judged most relevant, so you may see exactly where in the Enable corpus your answer is coming from.`;
+The result is a semantic landscape of the Enable team's knowledge. Your questions will appear on the map as stars and light up the most relevant documents to help you chart your way through the corpus.`;
 
 
 export default function ChatInterface({ onCitations, onFocusDoc, explanationTrigger }: Props) {
