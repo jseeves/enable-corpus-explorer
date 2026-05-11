@@ -9,6 +9,7 @@ interface Doc {
   resource_id: string;
   title: string;
   document_type: string;
+  short_summary: string;
   umap_x: number;
   umap_y: number;
 }
@@ -218,21 +219,27 @@ export default function KnowledgeExplorer() {
                         {cluster.description}
                       </p>
                     )}
-                    <ul className="space-y-0.5">
-                      {cluster.doc_ids.slice(0, 5).map(id => {
+                    <ul className="space-y-2.5 mt-1">
+                      {cluster.doc_ids.map(id => {
                         const doc = docMap.get(id);
                         return doc ? (
-                          <li key={id} className="flex items-start gap-1.5">
-                            <span className="mt-1.5 w-1 h-1 rounded-full bg-stone-300 flex-shrink-0" />
-                            <span className="text-[11px] text-stone-600 leading-snug">{doc.title}</span>
+                          <li key={id} className="space-y-0.5">
+                            <div className="flex items-center gap-1.5 flex-wrap">
+                              <span className="text-[10px] font-mono text-green-800 bg-green-50 border border-green-200 px-1.5 py-0.5 rounded flex-shrink-0">
+                                {doc.resource_id}
+                              </span>
+                              <span className="text-[11px] font-medium text-stone-800 leading-snug">
+                                {doc.title}
+                              </span>
+                            </div>
+                            {doc.short_summary && (
+                              <p className="text-[11px] text-stone-500 leading-relaxed pl-0.5">
+                                {doc.short_summary}
+                              </p>
+                            )}
                           </li>
                         ) : null;
                       })}
-                      {cluster.doc_ids.length > 5 && (
-                        <li className="text-[10px] text-stone-400 pl-2.5">
-                          +{cluster.doc_ids.length - 5} more
-                        </li>
-                      )}
                     </ul>
                   </div>
                 </div>
