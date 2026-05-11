@@ -33,7 +33,7 @@ interface Message {
 }
 
 interface Props {
-  onCitations: (ids: string[]) => void;
+  onCitations: (ids: string[], question?: string) => void;
   onFocusDoc: (id: string) => void;
   explanationTrigger: number;
 }
@@ -152,7 +152,7 @@ export default function ChatInterface({ onCitations, onFocusDoc, explanationTrig
             });
           } else if (evt.type === "citations" && evt.citations) {
             // Light up the visualization
-            onCitations(evt.citations.map((c) => c.resource_id));
+            onCitations(evt.citations.map((c) => c.resource_id), q);
             setMessages((prev) => {
               const next = [...prev];
               next[next.length - 1] = { ...next[next.length - 1], citations: evt.citations };

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 
 const Plot = dynamic(() => import("react-plotly.js"), { ssr: false });
@@ -26,10 +26,17 @@ interface CorpusData {
   n_docs: number;
 }
 
+interface QueryPoint {
+  x: number;
+  y: number;
+  question: string;
+}
+
 interface Props {
   citedIds: Set<string>;
   focusedDocId: string | null;
   onFocusDoc: (id: string | null) => void;
+  lastQuery: string;
 }
 
 const PALETTE = [
@@ -54,12 +61,14 @@ function wrapText(text: string, maxChars: number): string {
   return lines.join("<br>");
 }
 
-export default function CorpusExplorer({ citedIds, focusedDocId, onFocusDoc }: Props) {
+export default function CorpusExplorer({ citedIds, focusedDocId, onFocusDoc, lastQuery }: Props) {
   const [data, setData] = useState<CorpusData | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [search, setSearch] = useState("");
   const [plotReady, setPlotReady] = useState(false);
   const [hasInteracted, setHasInteracted] = useState(false);
+  const [queryHistory, setQueryHistory] = useState<QueryPoint[]>([]);
+  const prevQueryRef = useRef("");
 
   useEffect(() => {
     fetch("/api/corpus")
@@ -73,6 +82,17 @@ export default function CorpusExplorer({ citedIds, focusedDocId, onFocusDoc }: P
       })
       .catch((e) => setError(e.message));
   }, []);
+
+  // Append query centroid to history whenever a new completed query arrives
+  useEffect(() => {
+    if (!data || citedIds.size === 0 || !lastQuery || lastQuery === prevQueryRef.current) return;
+    const cited = data.docs.filter((d) => citedIds.has(d.resource_id));
+    if (!cited.length) return;
+    const x = cited.reduce((s, d) => s + d.umap_x, 0) / cited.length;
+    const y = cited.reduce((s, d) => s + d.umap_y, 0) / cited.length;
+    prevQueryRef.current = lastQuery;
+    setQueryHistory((h) => [...h, { x, y, question: lastQuery }]);
+  }, [citedIds, lastQuery, data]);
 
   const searchTerm = search.trim().toLowerCase();
   const hasSearch = searchTerm.length > 0;
@@ -172,6 +192,38 @@ export default function CorpusExplorer({ citedIds, focusedDocId, onFocusDoc }: P
         hoverinfo: "text",
       });
     }
+  }
+
+  // ── Query trajectory + markers ───────────────────────────────────────────
+  if (queryHistory.length > 1) {
+    traces.push({
+      x: queryHistory.map((q) => q.x),
+      y: queryHistory.map((q) => q.y),
+      mode: "lines",
+      type: "scatter",
+      name: "_trajectory",
+      showlegend: false,
+      line: { color: "#86efac", width: 1.5, dash: "dot" },
+      hoverinfo: "none",
+    });
+  }
+  if (queryHistory.length > 0) {
+    traces.push({
+      x: queryHistory.map((q) => q.x),
+      y: queryHistory.map((q) => q.y),
+      text: queryHistory.map((q, i) => `Q${i + 1}: ${q.question.length > 80 ? q.question.slice(0, 80) + "…" : q.question}`),
+      mode: "markers",
+      type: "scatter",
+      name: "_queries",
+      showlegend: false,
+      marker: {
+        symbol: "star",
+        size: queryHistory.map((_, i) => (i === queryHistory.length - 1 ? 16 : 11)),
+        color: queryHistory.map((_, i) => (i === queryHistory.length - 1 ? "#16a34a" : "#86efac")),
+        line: { color: "#15803d", width: 1 },
+      },
+      hoverinfo: "text",
+    });
   }
 
   // ── Focused doc selection ring ────────────────────────────────────────────

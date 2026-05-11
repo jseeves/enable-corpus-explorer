@@ -7,6 +7,7 @@ import ChatInterface from "@/components/ChatInterface";
 export default function Home() {
   const [citedIds, setCitedIds] = useState<Set<string>>(new Set());
   const [focusedDocId, setFocusedDocId] = useState<string | null>(null);
+  const [lastQuery, setLastQuery] = useState("");
   const [explanationTrigger] = useState(1);
 
   return (
@@ -34,15 +35,17 @@ export default function Home() {
             citedIds={citedIds}
             focusedDocId={focusedDocId}
             onFocusDoc={setFocusedDocId}
+            lastQuery={lastQuery}
           />
         </div>
 
         {/* Right: chat */}
         <div className="flex-1 flex flex-col min-h-0">
           <ChatInterface
-            onCitations={(ids) => {
+            onCitations={(ids, question) => {
               setCitedIds(new Set(ids));
               setFocusedDocId(null);
+              if (question) setLastQuery(question);
             }}
             onFocusDoc={setFocusedDocId}
             explanationTrigger={explanationTrigger}
