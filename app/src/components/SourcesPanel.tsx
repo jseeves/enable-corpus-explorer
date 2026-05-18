@@ -170,6 +170,7 @@ function SourceCard({ citation, doc }: { citation: CitationData; doc: Doc | null
 
       {/* Why retrieved */}
       <div className="px-3 pb-3">
+        <p className="text-[11px] font-bold text-green-700 mb-1">Why this source?</p>
         {citation.reason ? (
           <p className="text-[12px] text-stone-500 leading-relaxed">{citation.reason}</p>
         ) : (
