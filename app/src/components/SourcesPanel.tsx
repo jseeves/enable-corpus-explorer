@@ -17,6 +17,7 @@ interface CitationData {
   page_num: number;
   score: number;
   excerpt: string;
+  reason?: string | null;
 }
 
 interface Props {
@@ -130,16 +131,12 @@ function PassageSegments({ text }: { text: string }) {
 }
 
 function SourceCard({ citation, doc }: { citation: CitationData; doc: Doc | null }) {
-  const [expanded, setExpanded] = useState(false);
+  const [passageOpen, setPassageOpen] = useState(false);
   const org = doc?.organization ?? "World Resources Institute";
   const title = doc?.title ?? citation.title;
   const docType = doc?.document_type ?? "";
   const sourceUrl = doc?.source_url ?? null;
   const excerpt = citation.excerpt ?? "";
-  const teaser = excerpt.length > TEASER_LENGTH
-    ? excerpt.slice(0, TEASER_LENGTH).trimEnd() + "…"
-    : excerpt;
-  const hasMore = excerpt.length > TEASER_LENGTH;
 
   return (
     <div className="bg-white rounded-lg border border-stone-200 overflow-hidden">
@@ -156,7 +153,7 @@ function SourceCard({ citation, doc }: { citation: CitationData; doc: Doc | null
       </div>
 
       {/* Title */}
-      <div className="px-3 pb-3">
+      <div className="px-3 pb-2">
         {sourceUrl ? (
           <a
             href={sourceUrl}
@@ -171,33 +168,26 @@ function SourceCard({ citation, doc }: { citation: CitationData; doc: Doc | null
         )}
       </div>
 
-      {/* Passage */}
-      {excerpt && (
-        <div className="px-3 pb-3 border-t border-stone-100 pt-3">
-          <p className="text-[10px] text-stone-400 uppercase tracking-wider mb-2">
-            p.{citation.page_num} · Retrieved passage
-          </p>
-          <div className="bg-stone-50 rounded-md p-2.5">
-            {expanded ? (
-              <PassageSegments text={excerpt} />
-            ) : (
-              <p className="text-[12px] text-stone-600 leading-relaxed">{teaser}</p>
-            )}
-            {hasMore && (
-              <button
-                onClick={() => setExpanded(!expanded)}
-                className="mt-2 text-[11px] text-green-700 hover:text-green-800 font-medium"
-              >
-                {expanded ? "Show less ▲" : "Read full passage ▼"}
-              </button>
-            )}
-          </div>
-        </div>
-      )}
+      {/* Why retrieved */}
+      <div className="px-3 pb-3">
+        {citation.reason ? (
+          <p className="text-[12px] text-stone-500 leading-relaxed">{citation.reason}</p>
+        ) : (
+          <p className="text-[12px] text-stone-300 italic">Analyzing relevance…</p>
+        )}
+      </div>
 
-      {/* Source link */}
-      {sourceUrl && (
-        <div className="px-3 pb-3 -mt-1">
+      {/* Footer: passage toggle + source link */}
+      <div className="px-3 pb-3 border-t border-stone-100 pt-2.5 flex items-center justify-between">
+        {excerpt ? (
+          <button
+            onClick={() => setPassageOpen(!passageOpen)}
+            className="text-[11px] text-stone-400 hover:text-stone-600 transition-colors"
+          >
+            {passageOpen ? "Hide passage ▲" : "View passage ▼"}
+          </button>
+        ) : <span />}
+        {sourceUrl && (
           <a
             href={sourceUrl}
             target="_blank"
@@ -205,10 +195,22 @@ function SourceCard({ citation, doc }: { citation: CitationData; doc: Doc | null
             className="text-[11px] text-green-700 hover:text-green-800 font-medium flex items-center gap-1"
           >
             View source
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 12" fill="currentColor" className="w-2.5 h-2.5">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 12" className="w-2.5 h-2.5">
               <path d="M6.5 1.5h4v4M10.5 1.5 5 7M3 2.5H1.5v9h9V10" stroke="currentColor" strokeWidth="1.2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
           </a>
+        )}
+      </div>
+
+      {/* Passage (hidden by default) */}
+      {passageOpen && excerpt && (
+        <div className="px-3 pb-3 border-t border-stone-100 pt-3">
+          <p className="text-[10px] text-stone-400 uppercase tracking-wider mb-2">
+            p.{citation.page_num} · Retrieved passage
+          </p>
+          <div className="bg-stone-50 rounded-md p-2.5">
+            <PassageSegments text={excerpt} />
+          </div>
         </div>
       )}
     </div>

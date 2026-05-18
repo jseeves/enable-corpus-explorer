@@ -12,6 +12,7 @@ interface CitationData {
   page_num: number;
   score: number;
   excerpt: string;
+  reason?: string | null;
 }
 
 type View = "explorer" | "knowledge";

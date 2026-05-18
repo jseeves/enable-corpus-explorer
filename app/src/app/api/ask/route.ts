@@ -6,6 +6,7 @@ import {
   streamAnswer,
   streamBibliography,
   rewriteQuery,
+  generateReasons,
   type ConversationTurn,
 } from "@/lib/anthropic";
 import { logToAirtable } from "@/lib/airtable";
@@ -52,6 +53,12 @@ export async function POST(req: NextRequest) {
         : streamAnswer(question, reranked);
 
       const encoder = new TextEncoder();
+      // Kick off reasons generation in parallel with the answer stream
+      const reasonsPromise = generateReasons(
+        question,
+        citations.map((c) => ({ resource_id: c.resource_id, title: c.title, excerpt: c.excerpt })),
+      );
+
       const readable = new ReadableStream({
         async start(controller) {
           let fullAnswer = "";
@@ -62,8 +69,15 @@ export async function POST(req: NextRequest) {
                 encoder.encode(`data: ${JSON.stringify({ type: "delta", text: delta })}\n\n`),
               );
             }
+            // Merge reasons into citations (likely already resolved by now)
+            const reasons = await reasonsPromise;
+            const reasonMap = new Map(reasons.map((r) => [r.resource_id, r.reason]));
+            const citationsWithReasons = citations.map((c) => ({
+              ...c,
+              reason: reasonMap.get(c.resource_id) ?? null,
+            }));
             controller.enqueue(
-              encoder.encode(`data: ${JSON.stringify({ type: "citations", citations })}\n\n`),
+              encoder.encode(`data: ${JSON.stringify({ type: "citations", citations: citationsWithReasons })}\n\n`),
             );
             controller.enqueue(
               encoder.encode(`data: ${JSON.stringify({ type: "done" })}\n\n`),

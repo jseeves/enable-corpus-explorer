@@ -124,6 +124,38 @@ export async function* streamAnswer(
   }
 }
 
+export async function generateReasons(
+  question: string,
+  docs: Array<{ resource_id: string; title: string; excerpt: string }>,
+): Promise<Array<{ resource_id: string; reason: string }>> {
+  if (docs.length === 0) return [];
+  const docList = docs
+    .map((d, i) => `${i + 1}. ${d.resource_id} | ${d.title}\n${d.excerpt.slice(0, 300)}`)
+    .join("\n\n");
+
+  const prompt =
+    `Question: "${question}"\n\n` +
+    `For each document below, write one plain sentence (under 20 words) explaining the specific insight or data it provides for this question. ` +
+    `Be concrete — not "it discusses restoration" but what specific finding, figure, or angle makes it useful here.\n\n` +
+    `Return ONLY a JSON array, no other text:\n[{"resource_id": "ks_001", "reason": "..."}, ...]\n\n` +
+    `Documents:\n${docList}`;
+
+  try {
+    const response = await getClient().messages.create({
+      model: REWRITE_MODEL,
+      max_tokens: 800,
+      messages: [{ role: "user", content: prompt }],
+    });
+    const block = response.content[0];
+    if (block.type !== "text") return [];
+    const json = block.text.match(/\[[\s\S]*\]/)?.[0];
+    if (!json) return [];
+    return JSON.parse(json) as Array<{ resource_id: string; reason: string }>;
+  } catch {
+    return [];
+  }
+}
+
 export async function* streamBibliography(
   question: string,
   chunks: RetrievedChunk[],
