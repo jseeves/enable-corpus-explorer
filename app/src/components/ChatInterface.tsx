@@ -278,19 +278,15 @@ export default function ChatInterface({ onCitations, onCitationsFull, onFocusDoc
             disabled={!canSend}
             aria-label="Send"
             className={
-              "w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 transition " +
+              "h-10 px-4 rounded-full flex items-center gap-1.5 flex-shrink-0 transition text-sm font-medium " +
               (canSend
-                ? "bg-stone-800 hover:bg-stone-700 text-white"
-                : "bg-stone-200 text-stone-400 cursor-not-allowed")
+                ? "bg-green-700 hover:bg-green-800 text-white"
+                : "bg-stone-100 text-stone-300 cursor-not-allowed")
             }
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-              className="w-4 h-4 rotate-90"
-            >
-              <path d="M3.105 2.288a.75.75 0 0 0-.826.95l1.28 4.486A.75.75 0 0 0 4.273 8.25h5.228a.75.75 0 0 1 0 1.5H4.273a.75.75 0 0 0-.714.526L2.28 14.762a.75.75 0 0 0 .826.95 28.896 28.896 0 0 0 15.293-7.154.75.75 0 0 0 0-1.115A28.897 28.897 0 0 0 3.105 2.288Z" />
+            Send
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-3.5 h-3.5">
+              <path d="M3 8h10M9 4l4 4-4 4" />
             </svg>
           </button>
         </div>
