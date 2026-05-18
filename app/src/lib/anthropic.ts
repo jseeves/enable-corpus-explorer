@@ -135,9 +135,11 @@ export async function generateReasons(
 
   const prompt =
     `Question: "${question}"\n\n` +
-    `For each document below, write one plain sentence (under 20 words) explaining the specific insight or data it provides for this question. ` +
-    `Be concrete — not "it discusses restoration" but what specific finding, figure, or angle makes it useful here.\n\n` +
-    `Return ONLY a JSON array, no other text:\n[{"resource_id": "ks_001", "reason": "..."}, ...]\n\n` +
+    `For each document below, write one short phrase explaining why it was retrieved for this question — not what it says, but what makes it relevant. ` +
+    `Start with a strong verb. Focus on the connection to the question, not the document's content.\n\n` +
+    `Good: "Quantifies government subsidy reform costs across three country case studies."\n` +
+    `Bad: "Governments should remove subsidies that incentivize land degradation." (that's a summary, not a relevance explanation)\n\n` +
+    `Under 20 words. Return ONLY a JSON array, no other text:\n[{"resource_id": "ks_001", "reason": "..."}, ...]\n\n` +
     `Documents:\n${docList}`;
 
   try {
