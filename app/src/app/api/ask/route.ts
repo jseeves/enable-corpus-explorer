@@ -130,7 +130,7 @@ function dedupeByResourceId(chunks: RetrievedChunk[]) {
       title: (c.metadata?.title as string) || c.resource_id,
       page_num: c.page_num,
       score: c.score,
-      excerpt: c.text.slice(0, 200),
+      excerpt: c.text,
     });
   }
   return out;
