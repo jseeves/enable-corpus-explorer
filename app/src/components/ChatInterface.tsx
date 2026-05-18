@@ -380,49 +380,83 @@ function MessageBubble({
           corpus={corpus}
         />
       ) : (
-        <div className="text-stone-900 leading-relaxed text-[15px] whitespace-pre-wrap">
-          {renderWithCitations(message.content, byId, onOpenDoc, corpus)}
+        <div className="text-stone-900 leading-relaxed text-[15px]">
+          {renderMarkdown(message.content, byId, onOpenDoc, corpus)}
         </div>
       )}
     </div>
   );
 }
 
-// ── Citation rendering ───────────────────────────────────────────────────────
+// ── Markdown + citation rendering ────────────────────────────────────────────
 
-function renderWithCitations(
+// Renders inline spans: **bold** and [ks_xxx] citation chips.
+function renderInline(
   text: string,
   byId: Map<string, CitationData>,
   onOpenDoc: (rid: string) => void,
   corpus: Map<string, Doc>,
-): React.ReactNode {
+  keyOffset: { n: number },
+): React.ReactNode[] {
   const parts: React.ReactNode[] = [];
-  const re = /\[((?:ks_\d+(?:,\s*)?)+)\]/g;
+  const re = /(\*\*([^*]+)\*\*|\[((?:ks_\d+(?:,\s*)?)+)\])/g;
   let last = 0;
   let match: RegExpExecArray | null;
-  let key = 0;
   while ((match = re.exec(text)) !== null) {
     if (match.index > last) parts.push(text.slice(last, match.index));
-    const ids = match[1].split(",").map((s) => s.trim());
-    for (let i = 0; i < ids.length; i++) {
-      const rid = ids[i];
-      // Use the document title if available, else fall back to resource_id
-      const label = corpus.get(rid)?.title ?? rid;
-      parts.push(
-        <Citation
-          key={`c-${key++}`}
-          resourceId={rid}
-          label={label}
-          data={byId.get(rid)}
-          onOpen={() => onOpenDoc(rid)}
-        />,
-      );
-      if (i < ids.length - 1) parts.push(" ");
+    if (match[0].startsWith("**")) {
+      parts.push(<strong key={keyOffset.n++} className="font-semibold text-stone-900">{match[2]}</strong>);
+    } else {
+      const ids = match[3].split(",").map((s) => s.trim());
+      for (let i = 0; i < ids.length; i++) {
+        const rid = ids[i];
+        const label = corpus.get(rid)?.title ?? rid;
+        parts.push(
+          <Citation key={`c-${keyOffset.n++}`} resourceId={rid} label={label} data={byId.get(rid)} onOpen={() => onOpenDoc(rid)} />,
+        );
+        if (i < ids.length - 1) parts.push(" ");
+      }
     }
     last = match.index + match[0].length;
   }
   if (last < text.length) parts.push(text.slice(last));
   return parts;
+}
+
+// Renders a full answer with paragraphs, bullet lists, and inline markdown.
+function renderMarkdown(
+  text: string,
+  byId: Map<string, CitationData>,
+  onOpenDoc: (rid: string) => void,
+  corpus: Map<string, Doc>,
+): React.ReactNode {
+  const keyOffset = { n: 0 };
+  const paragraphs = text.split(/\n{2,}/);
+  return (
+    <div className="space-y-3">
+      {paragraphs.map((para, pi) => {
+        const lines = para.split("\n").map((l) => l.trimEnd());
+        const isList = lines.every((l) => l === "" || /^[-*•]\s/.test(l));
+        if (isList) {
+          return (
+            <ul key={pi} className="space-y-1 pl-1">
+              {lines.filter(Boolean).map((line, li) => (
+                <li key={li} className="flex gap-2">
+                  <span className="mt-1.5 w-1 h-1 rounded-full bg-stone-400 shrink-0" />
+                  <span>{renderInline(line.replace(/^[-*•]\s+/, ""), byId, onOpenDoc, corpus, keyOffset)}</span>
+                </li>
+              ))}
+            </ul>
+          );
+        }
+        return (
+          <p key={pi}>
+            {renderInline(para, byId, onOpenDoc, corpus, keyOffset)}
+          </p>
+        );
+      })}
+    </div>
+  );
 }
 
 function BibliographyView({
