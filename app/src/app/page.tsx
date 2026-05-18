@@ -4,11 +4,21 @@ import { useState } from "react";
 import CorpusExplorer from "@/components/CorpusExplorer";
 import ChatInterface from "@/components/ChatInterface";
 import KnowledgeExplorer from "@/components/KnowledgeExplorer";
+import SourcesPanel from "@/components/SourcesPanel";
+
+interface CitationData {
+  resource_id: string;
+  title: string;
+  page_num: number;
+  score: number;
+  excerpt: string;
+}
 
 type View = "explorer" | "knowledge";
 
 export default function Home() {
   const [citedIds, setCitedIds] = useState<Set<string>>(new Set());
+  const [citationsFull, setCitationsFull] = useState<CitationData[]>([]);
   const [focusedDocId, setFocusedDocId] = useState<string | null>(null);
   const [lastQuery, setLastQuery] = useState("");
   const [explanationTrigger] = useState(1);
@@ -53,7 +63,7 @@ export default function Home() {
         {view === "explorer" ? (
           <>
             {/* Left: visualization */}
-            <div className="w-[58%] border-r border-stone-200 flex flex-col min-h-0">
+            <div className="w-[48%] border-r border-stone-200 flex flex-col min-h-0">
               <CorpusExplorer
                 citedIds={citedIds}
                 focusedDocId={focusedDocId}
@@ -61,17 +71,22 @@ export default function Home() {
                 lastQuery={lastQuery}
               />
             </div>
-            {/* Right: chat */}
-            <div className="flex-1 flex flex-col min-h-0">
+            {/* Middle: chat */}
+            <div className="flex-1 flex flex-col min-h-0 border-r border-stone-200">
               <ChatInterface
                 onCitations={(ids, question) => {
                   setCitedIds(new Set(ids));
                   setFocusedDocId(null);
                   if (question) setLastQuery(question);
                 }}
+                onCitationsFull={setCitationsFull}
                 onFocusDoc={setFocusedDocId}
                 explanationTrigger={explanationTrigger}
               />
+            </div>
+            {/* Right: sources */}
+            <div className="w-72 flex flex-col min-h-0">
+              <SourcesPanel citations={citationsFull} />
             </div>
           </>
         ) : (

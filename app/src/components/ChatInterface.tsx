@@ -34,6 +34,7 @@ interface Message {
 
 interface Props {
   onCitations: (ids: string[], question?: string) => void;
+  onCitationsFull: (citations: CitationData[]) => void;
   onFocusDoc: (id: string) => void;
   explanationTrigger: number;
 }
@@ -48,7 +49,7 @@ Since 1,024 dimensions cannot be shown on a screen, the visualization displays t
 The result is a semantic landscape of the Enable team's knowledge. Your questions will appear on the map as stars and light up the most relevant documents to help you chart your way through the corpus.`;
 
 
-export default function ChatInterface({ onCitations, onFocusDoc, explanationTrigger }: Props) {
+export default function ChatInterface({ onCitations, onCitationsFull, onFocusDoc, explanationTrigger }: Props) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [mode, setMode] = useState<ChatMode>("answer");
@@ -106,7 +107,8 @@ export default function ChatInterface({ onCitations, onFocusDoc, explanationTrig
 
     setError(null);
     setInput("");
-    onCitations([]); // clear citation highlights while new answer is in flight
+    onCitations([]);
+    onCitationsFull([]);
 
     // Collect recent Q&A pairs for query rewriting (exclude explanation messages)
     const history: Array<{ question: string; answer: string }> = [];
@@ -163,8 +165,9 @@ export default function ChatInterface({ onCitations, onFocusDoc, explanationTrig
               return next;
             });
           } else if (evt.type === "citations" && evt.citations) {
-            // Light up the visualization
+            // Light up the visualization and populate sources panel
             onCitations(evt.citations.map((c) => c.resource_id), q);
+            onCitationsFull(evt.citations);
             setMessages((prev) => {
               const next = [...prev];
               next[next.length - 1] = { ...next[next.length - 1], citations: evt.citations };

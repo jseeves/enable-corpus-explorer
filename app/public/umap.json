@@ -13,7 +13,9 @@
       "short_summary": "A WRI commentary laying out three steps to grow private capital for landscape restoration: build a pipeline of investable projects, expand the investor base, and aggregate projects into funds and securities.",
       "canonical_reference": "FALSE",
       "umap_x": 13.901432991027832,
-      "umap_y": -1.7825132608413696
+      "umap_y": -1.7825132608413696,
+      "source_url": "https://www.wri.org/insights/3-steps-toward-growing-funds-restoration",
+      "organization": "World Resources Institute"
     },
     {
       "resource_id": "ks_002",
@@ -28,7 +30,9 @@
       "short_summary": "A funder-targeted companion brief to the WRI report Food Systems at Risk, laying out specific actions that adaptation funders (GCF, MDBs, bilaterals, philanthropy) should take to support transformative agricultural adaptation.",
       "canonical_reference": "FALSE",
       "umap_x": 11.863299369812012,
-      "umap_y": -0.4017378091812134
+      "umap_y": -0.4017378091812134,
+      "source_url": null,
+      "organization": "World Resources Institute"
     },
     {
       "resource_id": "ks_003",
@@ -43,7 +47,9 @@
       "short_summary": "A policy brief analyzing Mexico's national PES system, run by CONAFOR since 2003, covering three federal schemes and drawing lessons for countries designing PES at scale.",
       "canonical_reference": "FALSE",
       "umap_x": 12.66656494140625,
-      "umap_y": -1.887955665588379
+      "umap_y": -1.887955665588379,
+      "source_url": null,
+      "organization": "World Resources Institute"
     },
     {
       "resource_id": "ks_004",
@@ -58,7 +64,9 @@
       "short_summary": "A WRI working paper presenting benefit-cost analyses of community forest tenure security in Brazil and Guatemala, finding benefits outweigh costs in both study areas.",
       "canonical_reference": "FALSE",
       "umap_x": 13.181608200073242,
-      "umap_y": 0.3105194866657257
+      "umap_y": 0.3105194866657257,
+      "source_url": "https://www.wri.org/research/economic-costs-and-benefits-securing-community-forest-tenure",
+      "organization": "World Resources Institute"
     },
     {
       "resource_id": "ks_005",
@@ -73,7 +81,9 @@
       "short_summary": "A WRI report making the economic case for securing Indigenous land rights in the Amazon, using matching analysis in Bolivia, Brazil, and Colombia to quantify avoided deforestation, carbon benefits, and other ecosystem service values.",
       "canonical_reference": "TRUE",
       "umap_x": 12.824496269226074,
-      "umap_y": 0.20814809203147888
+      "umap_y": 0.20814809203147888,
+      "source_url": "https://www.wri.org/research/climate-benefits-tenure-costs",
+      "organization": "World Resources Institute"
     },
     {
       "resource_id": "ks_006",
@@ -88,7 +98,9 @@
       "short_summary": "The foundational handbook for the Restoration Opportunities Assessment Methodology (ROAM), jointly published by IUCN and WRI to guide national and sub-national assessments of FLR opportunities.",
       "canonical_reference": "TRUE",
       "umap_x": 15.212462425231934,
-      "umap_y": -0.42890235781669617
+      "umap_y": -0.42890235781669617,
+      "source_url": "https://www.wri.org/research/restoration-opportunities-assessment-methodology-roam",
+      "organization": "World Resources Institute"
     },
     {
       "resource_id": "ks_007",
@@ -103,7 +115,9 @@
       "short_summary": "A peer-reviewed Land Use Policy article applying social network analysis to restoration governance in Rwanda, mapping actor relationships across information, finance, and seedling flows at national, district, and community scales.",
       "canonical_reference": "FALSE",
       "umap_x": 14.679556846618652,
-      "umap_y": -1.1658039093017578
+      "umap_y": -1.1658039093017578,
+      "source_url": "https://www.sciencedirect.com/science/article/abs/pii/S0264837718311517",
+      "organization": "Peer-Reviewed Journal"
     },
     {
       "resource_id": "ks_008",
@@ -118,7 +132,9 @@
       "short_summary": "A KDD 2019 FEED workshop paper by John Brandt (WRI) introducing an unsupervised neural information retrieval architecture to classify FLR policy agenda across policy documents in Malawi, Kenya, and Rwanda, achieving F1 of 0.83 across 14 policy agenda.",
       "canonical_reference": "FALSE",
       "umap_x": 15.190176010131836,
-      "umap_y": -1.6355154514312744
+      "umap_y": -1.6355154514312744,
+      "source_url": "https://arxiv.org/abs/1908.02425",
+      "organization": "Academic (arXiv)"
     },
     {
       "resource_id": "ks_009",
@@ -133,7 +149,9 @@
       "short_summary": "A Malawi country case study on scaling farmer-managed natural regeneration (FMNR) and tree-based agricultural systems to enhance food security, climate resilience, and carbon sequestration, co-authored by ICRAF, WRI, and the World Bank-housed PROFOR program.",
       "canonical_reference": "FALSE",
       "umap_x": 12.266644477844238,
-      "umap_y": 0.04784056544303894
+      "umap_y": 0.04784056544303894,
+      "source_url": "https://www.profor.info/TBSMalawi",
+      "organization": "PROFOR / World Bank"
     },
     {
       "resource_id": "ks_010",
@@ -148,7 +166,9 @@
       "short_summary": "A 2017 Trellis (formerly GreenBiz) article by Andrew Wu framing landscape restoration for mainstream sustainability-business readers, arguing restoration generates both recurring income and capital gains with a total economic opportunity of ~$84 billion.",
       "canonical_reference": "FALSE",
       "umap_x": 13.6554594039917,
-      "umap_y": -2.4175307750701904
+      "umap_y": -2.4175307750701904,
+      "source_url": "https://trellis.net/article/forest-restoration-projects-could-create-billions-new-revenue/",
+      "organization": "Trellis"
     },
     {
       "resource_id": "ks_011",
@@ -160,10 +180,12 @@
       "region": "global",
       "publication_date": "2019-03-27",
       "page_count": 8,
-      "short_summary": "A WRI commentary on how rigid forest laws, unclear tenure, and lax enforcement can create paradoxes that undermine restoration — using a Guatemalan landholder example to illustrate.",
+      "short_summary": "A WRI commentary on how rigid forest laws, unclear tenure, and lax enforcement can create paradoxes that undermine restoration \u2014 using a Guatemalan landholder example to illustrate.",
       "canonical_reference": "FALSE",
       "umap_x": 14.49547004699707,
-      "umap_y": -2.2910892963409424
+      "umap_y": -2.2910892963409424,
+      "source_url": "https://www.wri.org/insights/3-ways-well-intentioned-forest-laws-and-their-enforcement-can-block-restoration",
+      "organization": "World Resources Institute"
     },
     {
       "resource_id": "ks_012",
@@ -175,15 +197,17 @@
       "region": "Latin America and Caribbean",
       "publication_date": "2019-12-05",
       "page_count": 12,
-      "short_summary": "A WRI commentary drawing on a new WRI Brasil / GIZ working paper to present four sustainable agricultural practices — integrated crop-livestock-forestry, agroforestry, direct seeding, and rainwater harvesting — that build climate resilience while generating farmer income.",
+      "short_summary": "A WRI commentary drawing on a new WRI Brasil / GIZ working paper to present four sustainable agricultural practices \u2014 integrated crop-livestock-forestry, agroforestry, direct seeding, and rainwater harvesting \u2014 that build climate resilience while generating farmer income.",
       "canonical_reference": "FALSE",
       "umap_x": 11.457680702209473,
-      "umap_y": -0.5731723308563232
+      "umap_y": -0.5731723308563232,
+      "source_url": "https://www.wri.org/insights/4-ways-farmers-can-adapt-climate-change-and-generate-income",
+      "organization": "World Resources Institute"
     },
     {
       "resource_id": "ks_013",
-      "title": "6 Barriers to Protecting and Restoring Forests – and Strategies to Overcome Them",
-      "file_name": "6 Barriers to Protecting and Restoring Forests – and Strategies to Overcome Them _ World Resources Institute.pdf",
+      "title": "6 Barriers to Protecting and Restoring Forests \u2013 and Strategies to Overcome Them",
+      "file_name": "6 Barriers to Protecting and Restoring Forests \u2013 and Strategies to Overcome Them _ World Resources Institute.pdf",
       "document_type": "commentary_blog",
       "phase_of_restoration": "planning",
       "target_audience": "policymaker | practitioner",
@@ -193,7 +217,9 @@
       "short_summary": "A companion commentary to WRI's Public-Sector Measures working paper (commissioned by the Food and Land Use Coalition), identifying six economic and political-economy barriers to scaling forest conservation and restoration, with overcoming strategies.",
       "canonical_reference": "FALSE",
       "umap_x": 13.694266319274902,
-      "umap_y": -1.6743603944778442
+      "umap_y": -1.6743603944778442,
+      "source_url": "https://www.wri.org/insights/6-barriers-protecting-and-restoring-forests-and-strategies-overcome-them",
+      "organization": "World Resources Institute"
     },
     {
       "resource_id": "ks_014",
@@ -205,10 +231,12 @@
       "region": "Latin America and Caribbean",
       "publication_date": "2019-08-20",
       "page_count": 11,
-      "short_summary": "A commentary profiling how two very different Brazilian cities — Salvador and São Paulo — are working to protect and restore the Atlantic Forest, the country's other (and more endangered) rainforest.",
+      "short_summary": "A commentary profiling how two very different Brazilian cities \u2014 Salvador and S\u00e3o Paulo \u2014 are working to protect and restore the Atlantic Forest, the country's other (and more endangered) rainforest.",
       "canonical_reference": "FALSE",
       "umap_x": 13.44943618774414,
-      "umap_y": -3.504894971847534
+      "umap_y": -3.504894971847534,
+      "source_url": "https://www.wri.org/insights/tale-two-cities-brazil-and-forest-connects-them",
+      "organization": "World Resources Institute"
     },
     {
       "resource_id": "ks_015",
@@ -223,7 +251,9 @@
       "short_summary": "A commentary marking AFR100's first anniversary, reporting that 21 African nations had committed 63.3 million hectares of land to restoration and catalyzing $481 million in private sector funding plus $1 billion in development finance.",
       "canonical_reference": "FALSE",
       "umap_x": 14.789142608642578,
-      "umap_y": -2.3673408031463623
+      "umap_y": -2.3673408031463623,
+      "source_url": "https://www.wri.org/insights/african-nations-poised-rapidly-accelerate-landscape-restoration",
+      "organization": "World Resources Institute"
     },
     {
       "resource_id": "ks_016",
@@ -235,10 +265,12 @@
       "region": "global",
       "publication_date": "2018-09-05",
       "page_count": 7,
-      "short_summary": "A WRI commentary arguing countries should align their Bonn Challenge restoration commitments with their Nationally Determined Contributions under the Paris Agreement — noting only 43 of 137 NDCs include numerical carbon targets for restoration.",
+      "short_summary": "A WRI commentary arguing countries should align their Bonn Challenge restoration commitments with their Nationally Determined Contributions under the Paris Agreement \u2014 noting only 43 of 137 NDCs include numerical carbon targets for restoration.",
       "canonical_reference": "FALSE",
       "umap_x": 14.845730781555176,
-      "umap_y": -3.024646043777466
+      "umap_y": -3.024646043777466,
+      "source_url": "https://www.wri.org/blog/2018/09/aligning-ambitions-case-including-restoration-targets-climate-goals",
+      "organization": "World Resources Institute"
     },
     {
       "resource_id": "ks_017",
@@ -250,10 +282,12 @@
       "region": "Sub-Saharan Africa",
       "publication_date": "2019-10-25",
       "page_count": 11,
-      "short_summary": "A commentary profiling Kenyan restoration entrepreneurs (KOFAR, Lentera Africa) to illustrate the 'missing middle' problem — restoration businesses seeking $20k-$200k in financing find few investors in that range.",
+      "short_summary": "A commentary profiling Kenyan restoration entrepreneurs (KOFAR, Lentera Africa) to illustrate the 'missing middle' problem \u2014 restoration businesses seeking $20k-$200k in financing find few investors in that range.",
       "canonical_reference": "FALSE",
       "umap_x": 12.546868324279785,
-      "umap_y": -2.8543035984039307
+      "umap_y": -2.8543035984039307,
+      "source_url": "https://www.wri.org/insights/attention-investors-african-entrepreneurs-are-restoring-land-and-making-profit",
+      "organization": "World Resources Institute"
     },
     {
       "resource_id": "ks_018",
@@ -268,7 +302,9 @@
       "short_summary": "A commentary arguing that the 350 Mha NY Declaration target can only be met if restoration shifts from tree-planting-at-scale toward protecting and managing naturally regenerating trees, citing early successes in Niger, Ethiopia, and Costa Rica.",
       "canonical_reference": "FALSE",
       "umap_x": 14.427529335021973,
-      "umap_y": -2.756718635559082
+      "umap_y": -2.756718635559082,
+      "source_url": "https://www.wri.org/insights/can-we-restore-350-million-hectares-2030",
+      "organization": "World Resources Institute"
     },
     {
       "resource_id": "ks_019",
@@ -280,10 +316,12 @@
       "region": "global",
       "publication_date": "2020-07-30",
       "page_count": 11,
-      "short_summary": "A commentary on the methodological challenges of tracking tree growth at global scale, in the context of the Trillion Trees initiative and corporate pledges — arguing that robust monitoring requires combining satellite data with ground-truthing.",
+      "short_summary": "A commentary on the methodological challenges of tracking tree growth at global scale, in the context of the Trillion Trees initiative and corporate pledges \u2014 arguing that robust monitoring requires combining satellite data with ground-truthing.",
       "canonical_reference": "FALSE",
       "umap_x": 14.385616302490234,
-      "umap_y": -4.005004405975342
+      "umap_y": -4.005004405975342,
+      "source_url": "https://www.wri.org/insights/challenge-tracking-how-trillion-trees-grow",
+      "organization": "World Resources Institute"
     },
     {
       "resource_id": "ks_020",
@@ -298,7 +336,9 @@
       "short_summary": "A commentary on using big-data/satellite approaches (Global Forest Watch, Collect Earth) to map deforestation and restoration at scale.",
       "canonical_reference": "FALSE",
       "umap_x": 14.517350196838379,
-      "umap_y": -4.050518989562988
+      "umap_y": -4.050518989562988,
+      "source_url": "https://www.wri.org/insights/counting-trees-save-woods-using-big-data-map-deforestation",
+      "organization": "World Resources Institute"
     },
     {
       "resource_id": "ks_021",
@@ -310,15 +350,17 @@
       "region": "Southeast Asia",
       "publication_date": "unknown",
       "page_count": 9,
-      "short_summary": "A commentary examining deforestation trends in the Mekong region — noting net losses inside forests but net gains in tree density in agricultural areas outside forests in all countries except Laos.",
+      "short_summary": "A commentary examining deforestation trends in the Mekong region \u2014 noting net losses inside forests but net gains in tree density in agricultural areas outside forests in all countries except Laos.",
       "canonical_reference": "FALSE",
       "umap_x": 13.888805389404297,
-      "umap_y": -4.034747123718262
+      "umap_y": -4.034747123718262,
+      "source_url": "https://www.wri.org/insights/deforestation-threatens-mekong-new-trees-are-growing-surprising-places",
+      "organization": "World Resources Institute"
     },
     {
       "resource_id": "ks_022",
-      "title": "Finance for Women Is Key to Restoring Africa’s Degraded Lands",
-      "file_name": "Finance for Women Is Key to Restoring Africa’s Degraded Lands _ World Resources Institute.pdf",
+      "title": "Finance for Women Is Key to Restoring Africa\u2019s Degraded Lands",
+      "file_name": "Finance for Women Is Key to Restoring Africa\u2019s Degraded Lands _ World Resources Institute.pdf",
       "document_type": "commentary_blog",
       "phase_of_restoration": "financing",
       "target_audience": "private sector | policymaker",
@@ -328,7 +370,9 @@
       "short_summary": "A vignette profiling the Kenyan Paran Women Group (a collective of 64 Indigenous women's groups) to argue that inclusive, women-led restoration finance is key to restoring Africa's degraded lands.",
       "canonical_reference": "FALSE",
       "umap_x": 12.675600051879883,
-      "umap_y": -3.0761680603027344
+      "umap_y": -3.0761680603027344,
+      "source_url": "https://www.wri.org/insights/finance-women-key-restoring-africas-degraded-lands",
+      "organization": "World Resources Institute"
     },
     {
       "resource_id": "ks_023",
@@ -343,22 +387,26 @@
       "short_summary": "A commentary on the inclusion of REDD+ in the Paris Agreement (Article 5), covering what the political signal means for forest finance and what comes next operationally.",
       "canonical_reference": "FALSE",
       "umap_x": 14.706488609313965,
-      "umap_y": -3.271667718887329
+      "umap_y": -3.271667718887329,
+      "source_url": "https://www.wri.org/insights/forests-are-paris-agreement-now-what",
+      "organization": "World Resources Institute"
     },
     {
       "resource_id": "ks_024",
-      "title": "Growing Trees and Growing Profit: Is Your Business a “Restoration Enterprise?”",
-      "file_name": "Growing Trees and Growing Profit_ Is Your Business a “Restoration Enterprise_” _ World Resources Institute.pdf",
+      "title": "Growing Trees and Growing Profit: Is Your Business a \u201cRestoration Enterprise?\u201d",
+      "file_name": "Growing Trees and Growing Profit_ Is Your Business a \u201cRestoration Enterprise_\u201d _ World Resources Institute.pdf",
       "document_type": "commentary_blog",
       "phase_of_restoration": "financing",
       "target_audience": "private sector",
       "region": "global",
       "publication_date": "2017-06-13",
       "page_count": 7,
-      "short_summary": "A commentary defining 'restoration enterprise' — companies whose value proposition is linked directly or indirectly to restoration — and introducing examples from EcoPlanet Bamboo to BioCarbon Engineering.",
+      "short_summary": "A commentary defining 'restoration enterprise' \u2014 companies whose value proposition is linked directly or indirectly to restoration \u2014 and introducing examples from EcoPlanet Bamboo to BioCarbon Engineering.",
       "canonical_reference": "FALSE",
       "umap_x": 13.8990478515625,
-      "umap_y": -3.00156307220459
+      "umap_y": -3.00156307220459,
+      "source_url": "https://www.wri.org/blog/2017/06/growing-trees-and-growing-profit-are-you-restoration-enterprise",
+      "organization": "World Resources Institute"
     },
     {
       "resource_id": "ks_025",
@@ -370,10 +418,12 @@
       "region": "global",
       "publication_date": "2020-06-18",
       "page_count": 10,
-      "short_summary": "A vignette introducing TerraMatch — WRI's platform for connecting restoration investors with trusted local tree-growing partners — using the Turkey 11M-saplings failure and 1970s Kenya mesquite introduction as cautionary tales.",
+      "short_summary": "A vignette introducing TerraMatch \u2014 WRI's platform for connecting restoration investors with trusted local tree-growing partners \u2014 using the Turkey 11M-saplings failure and 1970s Kenya mesquite introduction as cautionary tales.",
       "canonical_reference": "FALSE",
       "umap_x": 14.330780982971191,
-      "umap_y": -4.127546310424805
+      "umap_y": -4.127546310424805,
+      "source_url": "https://www.wri.org/insights/connecting-people-growing-trillion-trees-right-way",
+      "organization": "World Resources Institute"
     },
     {
       "resource_id": "ks_026",
@@ -385,10 +435,12 @@
       "region": "Latin America and Caribbean",
       "publication_date": "2016-08-03",
       "page_count": 8,
-      "short_summary": "Third installment of WRI's Restoration Global Tour series, profiling restoration success stories in Brazil (Tijuca urban forest), Panama, and Costa Rica — drawing on case studies from WRI's Restoration Diagnostic.",
+      "short_summary": "Third installment of WRI's Restoration Global Tour series, profiling restoration success stories in Brazil (Tijuca urban forest), Panama, and Costa Rica \u2014 drawing on case studies from WRI's Restoration Diagnostic.",
       "canonical_reference": "FALSE",
       "umap_x": 13.604204177856445,
-      "umap_y": -3.2819392681121826
+      "umap_y": -3.2819392681121826,
+      "source_url": "https://www.wri.org/insights/how-brazil-panama-and-costa-rica-breathed-new-life-their-degraded-lands",
+      "organization": "World Resources Institute"
     },
     {
       "resource_id": "ks_027",
@@ -400,10 +452,12 @@
       "region": "global",
       "publication_date": "2017-05-22",
       "page_count": 5,
-      "short_summary": "A short explainer arguing restoration projects deliver returns in two forms — income (recurring revenue) and capital gains (land value appreciation) — with examples from Indonesia and North Carolina.",
+      "short_summary": "A short explainer arguing restoration projects deliver returns in two forms \u2014 income (recurring revenue) and capital gains (land value appreciation) \u2014 with examples from Indonesia and North Carolina.",
       "canonical_reference": "FALSE",
       "umap_x": 13.550113677978516,
-      "umap_y": -2.530095338821411
+      "umap_y": -2.530095338821411,
+      "source_url": "https://www.wri.org/insights/how-can-restoring-degraded-landscapes-deliver-financial-returns",
+      "organization": "World Resources Institute"
     },
     {
       "resource_id": "ks_028",
@@ -418,7 +472,9 @@
       "short_summary": "A WRI Insights Finding on how local stakeholders can use Collect Earth (FAO's visual interpretation tool pulling Google Earth imagery) to map trees that escape satellite algorithms, especially in dry forests and on-farm landscapes.",
       "canonical_reference": "FALSE",
       "umap_x": 14.128235816955566,
-      "umap_y": -4.453004360198975
+      "umap_y": -4.453004360198975,
+      "source_url": "https://www.wri.org/insights/how-local-people-are-mapping-billions-trees-their-land",
+      "organization": "World Resources Institute"
     },
     {
       "resource_id": "ks_029",
@@ -433,7 +489,9 @@
       "short_summary": "An explainer distilling three steps for effective landscape restoration: (1) understand the state of the land and plan with people, (2) set realistic targets and build capacity, (3) monitor and learn.",
       "canonical_reference": "FALSE",
       "umap_x": 15.049975395202637,
-      "umap_y": -2.2906758785247803
+      "umap_y": -2.2906758785247803,
+      "source_url": "https://www.wri.org/insights/road-restoration-3-steps-transforming-landscapes",
+      "organization": "World Resources Institute"
     },
     {
       "resource_id": "ks_030",
@@ -445,15 +503,17 @@
       "region": "Latin America and Caribbean",
       "publication_date": "2019-10-17",
       "page_count": 8,
-      "short_summary": "A profile of Marliane das Chagas Soares and 21 other families in the Amazonian community of Juruti, Pará, Brazil, transitioning from cassava monoculture / slash-and-burn to diversified agroforestry with WRI Brasil support.",
+      "short_summary": "A profile of Marliane das Chagas Soares and 21 other families in the Amazonian community of Juruti, Par\u00e1, Brazil, transitioning from cassava monoculture / slash-and-burn to diversified agroforestry with WRI Brasil support.",
       "canonical_reference": "FALSE",
       "umap_x": 13.027745246887207,
-      "umap_y": -3.3911969661712646
+      "umap_y": -3.3911969661712646,
+      "source_url": "https://www.wri.org/insights/small-amazonian-community-agroforestry-takes",
+      "organization": "World Resources Institute"
     },
     {
       "resource_id": "ks_031",
-      "title": "Learning from African Farmers: How “Re-greening” Boosts Food Security; Curbs Climate Change",
-      "file_name": "Learning from African Farmers_ How “Re-greening” Boosts Food Security; Curbs Climate Change _ World Resources Institute.pdf",
+      "title": "Learning from African Farmers: How \u201cRe-greening\u201d Boosts Food Security; Curbs Climate Change",
+      "file_name": "Learning from African Farmers_ How \u201cRe-greening\u201d Boosts Food Security; Curbs Climate Change _ World Resources Institute.pdf",
       "document_type": "commentary_blog",
       "phase_of_restoration": "implementation",
       "target_audience": "policymaker | private sector",
@@ -463,22 +523,26 @@
       "short_summary": "An early (2013) WRI commentary by Chris Reij tied to President Obama's Africa trip, introducing farmer-managed re-greening in the Sahel as a low-cost, scalable strategy for food security and climate action.",
       "canonical_reference": "FALSE",
       "umap_x": 12.106701850891113,
-      "umap_y": -2.7265102863311768
+      "umap_y": -2.7265102863311768,
+      "source_url": "https://www.wri.org/insights/learning-african-farmers-how-re-greening-boosts-food-security-curbs-climate-change",
+      "organization": "World Resources Institute"
     },
     {
       "resource_id": "ks_032",
-      "title": "Learnings from TerraFund’s 100 Land Restoration Projects in Africa",
-      "file_name": "Learnings from TerraFund’s 100 Land Restoration Projects in Africa _ World Resources Institute.pdf",
+      "title": "Learnings from TerraFund\u2019s 100 Land Restoration Projects in Africa",
+      "file_name": "Learnings from TerraFund\u2019s 100 Land Restoration Projects in Africa _ World Resources Institute.pdf",
       "document_type": "commentary_blog",
       "phase_of_restoration": "financing | implementation",
       "target_audience": "private sector | policymaker",
       "region": "Sub-Saharan Africa",
       "publication_date": "2024-01-09",
       "page_count": 15,
-      "short_summary": "A project-update article reporting on two years of TerraFund for AFR100's 100-project cohort (launched 2021 with Bezos Earth Fund and partners) — $15M invested across 27 countries, 12.5M trees grown, 36,000 people paid, 202,000 beneficiaries.",
+      "short_summary": "A project-update article reporting on two years of TerraFund for AFR100's 100-project cohort (launched 2021 with Bezos Earth Fund and partners) \u2014 $15M invested across 27 countries, 12.5M trees grown, 36,000 people paid, 202,000 beneficiaries.",
       "canonical_reference": "TRUE",
       "umap_x": 12.899651527404785,
-      "umap_y": -2.7938759326934814
+      "umap_y": -2.7938759326934814,
+      "source_url": "https://www.wri.org/update/terrafund-afr100-anniversary-learnings",
+      "organization": "World Resources Institute"
     },
     {
       "resource_id": "ks_033",
@@ -493,7 +557,9 @@
       "short_summary": "A WRI Technical Perspective on multi-stakeholder platforms (MSPs) for landscape restoration, reporting on stocktake convenings in Rwanda and Malawi within the AFR100 context (12 of 34 AFR100 countries have MSPs).",
       "canonical_reference": "FALSE",
       "umap_x": 15.106473922729492,
-      "umap_y": -2.406033515930176
+      "umap_y": -2.406033515930176,
+      "source_url": "https://www.wri.org/technical-perspectives/multi-stakeholder-platforms-for-landscape-restoration",
+      "organization": "World Resources Institute"
     },
     {
       "resource_id": "ks_034",
@@ -505,10 +571,12 @@
       "region": "Sub-Saharan Africa",
       "publication_date": "2018-08-07",
       "page_count": 10,
-      "short_summary": "A Taking Root series profile of Ali Malam and Sakina Mati, Nigerien farmers using local radio to share FMNR success stories with other farmers — illustrating peer-to-peer diffusion as a low-cost restoration scaling mechanism.",
+      "short_summary": "A Taking Root series profile of Ali Malam and Sakina Mati, Nigerien farmers using local radio to share FMNR success stories with other farmers \u2014 illustrating peer-to-peer diffusion as a low-cost restoration scaling mechanism.",
       "canonical_reference": "FALSE",
       "umap_x": 12.173402786254883,
-      "umap_y": -3.0596089363098145
+      "umap_y": -3.0596089363098145,
+      "source_url": "https://www.wri.org/insights/radio-helps-niger-farmers-bring-life-back-their-land",
+      "organization": "World Resources Institute"
     },
     {
       "resource_id": "ks_035",
@@ -520,10 +588,12 @@
       "region": "global",
       "publication_date": "2018-03-16",
       "page_count": 6,
-      "short_summary": "A commentary introducing The Business of Planting Trees report (co-authored with TNC), profiling 14 of 140 researched restoration businesses — from EcoPlanet Bamboo to BioCarbon Engineering's drone tree-planting to Tentree's apparel-linked planting.",
+      "short_summary": "A commentary introducing The Business of Planting Trees report (co-authored with TNC), profiling 14 of 140 researched restoration businesses \u2014 from EcoPlanet Bamboo to BioCarbon Engineering's drone tree-planting to Tentree's apparel-linked planting.",
       "canonical_reference": "FALSE",
       "umap_x": 13.752391815185547,
-      "umap_y": -2.4182333946228027
+      "umap_y": -2.4182333946228027,
+      "source_url": "https://www.wri.org/insights/redefining-business-environmental-restoration",
+      "organization": "World Resources Institute"
     },
     {
       "resource_id": "ks_036",
@@ -538,7 +608,9 @@
       "short_summary": "A commentary framing WRI's Roots of Prosperity report, arguing restoration delivers $7-30 in benefits per $1 invested and identifying five government levers for unlocking finance (carbon pricing, incentive shifts, risk mitigation, land use planning, rigorous accounting).",
       "canonical_reference": "FALSE",
       "umap_x": 13.646890640258789,
-      "umap_y": -2.0341103076934814
+      "umap_y": -2.0341103076934814,
+      "source_url": "https://www.wri.org/insights/restoration-one-most-overlooked-opportunities-economic-growth",
+      "organization": "World Resources Institute"
     },
     {
       "resource_id": "ks_037",
@@ -550,10 +622,12 @@
       "region": "global",
       "publication_date": "2018-09-13",
       "page_count": 8,
-      "short_summary": "A commentary introducing a joint RRI/Woods Hole/WRI/EDF report showing Indigenous peoples and local communities manage at least 293,061 MtC — 17% of total forestland carbon globally — and that protecting their land rights is essential to meeting climate goals.",
+      "short_summary": "A commentary introducing a joint RRI/Woods Hole/WRI/EDF report showing Indigenous peoples and local communities manage at least 293,061 MtC \u2014 17% of total forestland carbon globally \u2014 and that protecting their land rights is essential to meeting climate goals.",
       "canonical_reference": "FALSE",
       "umap_x": 14.767481803894043,
-      "umap_y": -3.713488817214966
+      "umap_y": -3.713488817214966,
+      "source_url": "https://www.wri.org/insights/safeguarding-carbon-stored-indigenous-and-community-lands-essential-meeting-climate-goals",
+      "organization": "World Resources Institute"
     },
     {
       "resource_id": "ks_038",
@@ -568,22 +642,26 @@
       "short_summary": "A commentary on the global restoration movement, discussing the use of degraded land for agricultural expansion (instead of deforestation of forested land) as a tool for food security, climate action, and rural livelihoods.",
       "canonical_reference": "FALSE",
       "umap_x": 14.605530738830566,
-      "umap_y": -2.7672200202941895
+      "umap_y": -2.7672200202941895,
+      "source_url": "https://www.wri.org/insights/restoration-revolution",
+      "organization": "World Resources Institute"
     },
     {
       "resource_id": "ks_039",
-      "title": "The Roadmap to Decarbonization Won’t Go Far without Land",
-      "file_name": "The Roadmap to Decarbonization Won’t Go Far without Land _ World Resources Institute.pdf",
+      "title": "The Roadmap to Decarbonization Won\u2019t Go Far without Land",
+      "file_name": "The Roadmap to Decarbonization Won\u2019t Go Far without Land _ World Resources Institute.pdf",
       "document_type": "commentary_blog",
       "phase_of_restoration": "planning",
       "target_audience": "policymaker",
       "region": "global",
       "publication_date": "2017-04-04",
       "page_count": 8,
-      "short_summary": "A commentary on a decarbonization roadmap published in Science arguing that the agriculture and forestry sector was under-specified despite being critical to achieving net-zero — and laying out four concrete land-sector actions by 2050.",
+      "short_summary": "A commentary on a decarbonization roadmap published in Science arguing that the agriculture and forestry sector was under-specified despite being critical to achieving net-zero \u2014 and laying out four concrete land-sector actions by 2050.",
       "canonical_reference": "FALSE",
       "umap_x": 14.894052505493164,
-      "umap_y": -3.4403486251831055
+      "umap_y": -3.4403486251831055,
+      "source_url": "https://www.wri.org/insights/roadmap-decarbonization-wont-go-far-without-land",
+      "organization": "World Resources Institute"
     },
     {
       "resource_id": "ks_040",
@@ -595,10 +673,12 @@
       "region": "Sub-Saharan Africa",
       "publication_date": "2018-04-19",
       "page_count": 7,
-      "short_summary": "A profile of Rwandan farmer Patricie Nyirabahinzi in Gatsibo District, growing native Vernonia amygdalina (bitterleaf) for traditional medicine livelihoods — illustrating how restoration programs miss native-species needs and five ways to center farmers.",
+      "short_summary": "A profile of Rwandan farmer Patricie Nyirabahinzi in Gatsibo District, growing native Vernonia amygdalina (bitterleaf) for traditional medicine livelihoods \u2014 illustrating how restoration programs miss native-species needs and five ways to center farmers.",
       "canonical_reference": "FALSE",
       "umap_x": 12.301379203796387,
-      "umap_y": -2.9159634113311768
+      "umap_y": -2.9159634113311768,
+      "source_url": "https://www.wri.org/insights/regreen-rwanda-empower-farmers-here-are-5-ways-begin",
+      "organization": "World Resources Institute"
     },
     {
       "resource_id": "ks_041",
@@ -610,10 +690,12 @@
       "region": "global",
       "publication_date": "2017-02-17",
       "page_count": 6,
-      "short_summary": "A commentary introducing the Attracting Private Investment to Landscape Restoration working paper via a profile of Land Life Company, an Amsterdam restoration startup that raised Series A — and laying out the paper's four steps.",
+      "short_summary": "A commentary introducing the Attracting Private Investment to Landscape Restoration working paper via a profile of Land Life Company, an Amsterdam restoration startup that raised Series A \u2014 and laying out the paper's four steps.",
       "canonical_reference": "FALSE",
       "umap_x": 14.227033615112305,
-      "umap_y": -1.6327695846557617
+      "umap_y": -1.6327695846557617,
+      "source_url": "https://www.wri.org/insights/tree-planting-startup-shows-4-steps-raising-capital-restoration",
+      "organization": "World Resources Institute"
     },
     {
       "resource_id": "ks_042",
@@ -625,10 +707,12 @@
       "region": "global",
       "publication_date": "2020-02-10",
       "page_count": 9,
-      "short_summary": "A commentary written in response to the 1t.org trillion-trees announcement, laying out five principles — start with people, pick the right species, invest in maintenance, monitor, conserve existing trees — with the Priceless Planet Coalition as example.",
+      "short_summary": "A commentary written in response to the 1t.org trillion-trees announcement, laying out five principles \u2014 start with people, pick the right species, invest in maintenance, monitor, conserve existing trees \u2014 with the Priceless Planet Coalition as example.",
       "canonical_reference": "FALSE",
       "umap_x": 14.272808074951172,
-      "umap_y": -4.1678147315979
+      "umap_y": -4.1678147315979,
+      "source_url": "https://www.wri.org/insights/want-grow-trees-consider-these-5-lessons",
+      "organization": "World Resources Institute"
     },
     {
       "resource_id": "ks_043",
@@ -643,7 +727,9 @@
       "short_summary": "An early (2013) WRI commentary tied to a Global Partnership on Forest Landscape Restoration meeting, introducing 'forest landscape restoration' and WRI/IUCN's Landscapes of Opportunity 2011 global assessment.",
       "canonical_reference": "FALSE",
       "umap_x": 14.623357772827148,
-      "umap_y": -2.0542967319488525
+      "umap_y": -2.0542967319488525,
+      "source_url": "https://www.wri.org/insights/what-does-it-take-successful-forest-landscape-restoration",
+      "organization": "World Resources Institute"
     },
     {
       "resource_id": "ks_045",
@@ -658,7 +744,9 @@
       "short_summary": "A WRI Brasil working paper identifying research gaps and priorities for silviculture of native species (Amazon and Atlantic Forest biomes), proposing four investment scenarios for a pre-competitive R&D Platform and estimating ROI for each.",
       "canonical_reference": "FALSE",
       "umap_x": 13.194356918334961,
-      "umap_y": 0.6962071061134338
+      "umap_y": 0.6962071061134338,
+      "source_url": "https://www.wribrasil.org.br/sites/default/files/AF_WRI_WorkingPaper_ResearchGapsInSilviculture_digital_0.pdf",
+      "organization": "WRI Brasil"
     },
     {
       "resource_id": "ks_046",
@@ -673,7 +761,9 @@
       "short_summary": "A 12-page WRI working paper providing a four-step practical roadmap for restoration enterprises to attract private capital: get to know investors, develop a business plan, set up an investable entity, track performance.",
       "canonical_reference": "TRUE",
       "umap_x": 13.907872200012207,
-      "umap_y": -1.1229420900344849
+      "umap_y": -1.1229420900344849,
+      "source_url": "https://www.wri.org/research/attracting-private-investment-landscape-restoration-roadmap",
+      "organization": "World Resources Institute"
     },
     {
       "resource_id": "ks_047",
@@ -688,7 +778,9 @@
       "short_summary": "An entire issue of FAO's Unasylva international journal of forestry (Vol. 66, 2015/3), focused on forest and landscape restoration including a feature on bamboo's role as a restoration species.",
       "canonical_reference": "TRUE",
       "umap_x": 15.638250350952148,
-      "umap_y": -0.8399749398231506
+      "umap_y": -0.8399749398231506,
+      "source_url": "https://openknowledge.fao.org/server/api/core/bitstreams/54b52f00-9d3d-4207-b3bc-32ce0eb652fe/content",
+      "organization": "FAO"
     },
     {
       "resource_id": "ks_048",
@@ -700,10 +792,12 @@
       "region": "Latin America and Caribbean",
       "publication_date": "2025-12",
       "page_count": 18,
-      "short_summary": "A WRI policy brief on Costa Rica's PPSA — the world's longest-standing national PES program (established 1996 under Forest Law 7575), which has protected or restored 1.1M+ hectares and distributed $565M+ in payments over three decades.",
+      "short_summary": "A WRI policy brief on Costa Rica's PPSA \u2014 the world's longest-standing national PES program (established 1996 under Forest Law 7575), which has protected or restored 1.1M+ hectares and distributed $565M+ in payments over three decades.",
       "canonical_reference": "FALSE",
       "umap_x": 12.825467109680176,
-      "umap_y": -1.9810596704483032
+      "umap_y": -1.9810596704483032,
+      "source_url": null,
+      "organization": "World Resources Institute"
     },
     {
       "resource_id": "ks_049",
@@ -715,10 +809,12 @@
       "region": "Latin America and Caribbean | Sub-Saharan Africa | Southeast Asia",
       "publication_date": "2026-02",
       "page_count": 203,
-      "short_summary": "A 203-page financial analysis of 14 Assisted Natural Regeneration systems across Latin America, Africa, and Asia — focused on enrichment planting of naturally regenerating forests and woodlands with native non-timber forest product species.",
+      "short_summary": "A 203-page financial analysis of 14 Assisted Natural Regeneration systems across Latin America, Africa, and Asia \u2014 focused on enrichment planting of naturally regenerating forests and woodlands with native non-timber forest product species.",
       "canonical_reference": "TRUE",
       "umap_x": 13.703431129455566,
-      "umap_y": 0.7825907468795776
+      "umap_y": 0.7825907468795776,
+      "source_url": null,
+      "organization": "World Resources Institute"
     },
     {
       "resource_id": "ks_050",
@@ -730,10 +826,12 @@
       "region": "Latin America and Caribbean",
       "publication_date": "2025-11",
       "page_count": 20,
-      "short_summary": "A WRI policy brief on Guatemala's three forestry incentive programs (PINFOR 1996-2016; PINPEP for smallholders since 2010; PROBOSQUE succeeding PINFOR through 2046) — which have invested $525M+ and enrolled ~588,000 ha of land.",
+      "short_summary": "A WRI policy brief on Guatemala's three forestry incentive programs (PINFOR 1996-2016; PINPEP for smallholders since 2010; PROBOSQUE succeeding PINFOR through 2046) \u2014 which have invested $525M+ and enrolled ~588,000 ha of land.",
       "canonical_reference": "FALSE",
       "umap_x": 12.664072036743164,
-      "umap_y": -1.9771298170089722
+      "umap_y": -1.9771298170089722,
+      "source_url": null,
+      "organization": "World Resources Institute"
     },
     {
       "resource_id": "ks_051",
@@ -748,7 +846,9 @@
       "short_summary": "A peer-reviewed paper (Journal of Computational Social Science 3:167-188) applying social network analysis and machine learning to Twitter data from the Global Landscapes Forum (Nairobi vs Bonn) to measure whether African, women, and young voices are elevated.",
       "canonical_reference": "FALSE",
       "umap_x": 15.104218482971191,
-      "umap_y": -1.320581078529358
+      "umap_y": -1.320581078529358,
+      "source_url": "https://link.springer.com/article/10.1007/s42001-019-00061-9",
+      "organization": "Peer-Reviewed Journal"
     },
     {
       "resource_id": "ks_052",
@@ -760,10 +860,12 @@
       "region": "global",
       "publication_date": "2018-08",
       "page_count": 96,
-      "short_summary": "A 96-page WRI guidebook operationalizing social network analysis (SNA) for restoration governance — mapping the connections, priorities, and values of actors in restoration landscapes at national, district, and community scales.",
+      "short_summary": "A 96-page WRI guidebook operationalizing social network analysis (SNA) for restoration governance \u2014 mapping the connections, priorities, and values of actors in restoration landscapes at national, district, and community scales.",
       "canonical_reference": "TRUE",
       "umap_x": 14.828322410583496,
-      "umap_y": -0.8842283487319946
+      "umap_y": -0.8842283487319946,
+      "source_url": "https://www.wri.org/research/mapping-social-landscapes-guide-identifying-networks-priorities-and-values-restoration",
+      "organization": "World Resources Institute"
     },
     {
       "resource_id": "ks_053",
@@ -775,10 +877,12 @@
       "region": "global",
       "publication_date": "2021-01",
       "page_count": 98,
-      "short_summary": "A joint FAO/WRI 98-page guidebook on monitoring forest and landscape restoration using Collect Earth mapathons — laying out eight operational steps from data use planning through results dissemination.",
+      "short_summary": "A joint FAO/WRI 98-page guidebook on monitoring forest and landscape restoration using Collect Earth mapathons \u2014 laying out eight operational steps from data use planning through results dissemination.",
       "canonical_reference": "TRUE",
       "umap_x": 15.498584747314453,
-      "umap_y": -0.6223025321960449
+      "umap_y": -0.6223025321960449,
+      "source_url": "https://www.wri.org/research/mapping-together-guide-monitoring-forest-and-landscape-restoration-using-collect-earth",
+      "organization": "World Resources Institute"
     },
     {
       "resource_id": "ks_054",
@@ -790,10 +894,12 @@
       "region": "South Asia",
       "publication_date": "2018-04",
       "page_count": 20,
-      "short_summary": "A WRI India Technical Note on MAPTenure — the first web-based platform for resolving 'orange area' tenure ambiguity in Madhya Pradesh and Chhattisgarh, where 1.2M ha and 1.5M families are affected by overlapping revenue/forest department claims.",
+      "short_summary": "A WRI India Technical Note on MAPTenure \u2014 the first web-based platform for resolving 'orange area' tenure ambiguity in Madhya Pradesh and Chhattisgarh, where 1.2M ha and 1.5M families are affected by overlapping revenue/forest department claims.",
       "canonical_reference": "FALSE",
       "umap_x": 13.57468032836914,
-      "umap_y": 0.1533355861902237
+      "umap_y": 0.1533355861902237,
+      "source_url": "https://www.wri.org/publication/map-tenure",
+      "organization": "World Resources Institute"
     },
     {
       "resource_id": "ks_055",
@@ -808,7 +914,9 @@
       "short_summary": "The policymaker-targeted companion to WRI's Food Systems at Risk report, detailing how governments and adaptation support organizations can integrate transformative adaptation into plans and policies.",
       "canonical_reference": "FALSE",
       "umap_x": 11.553138732910156,
-      "umap_y": -0.3696631193161011
+      "umap_y": -0.3696631193161011,
+      "source_url": null,
+      "organization": "World Resources Institute"
     },
     {
       "resource_id": "ks_056",
@@ -823,7 +931,9 @@
       "short_summary": "The researcher-targeted companion to WRI's Food Systems at Risk report, summarizing key recommendations on how agricultural research organizations can expand their agendas to better incorporate transformative adaptation approaches.",
       "canonical_reference": "FALSE",
       "umap_x": 11.562783241271973,
-      "umap_y": -0.22146853804588318
+      "umap_y": -0.22146853804588318,
+      "source_url": null,
+      "organization": "World Resources Institute"
     },
     {
       "resource_id": "ks_057",
@@ -838,7 +948,9 @@
       "short_summary": "A peer-reviewed Ecological Indicators paper (148, 2023, 110068) using two-year panel data from Malawi's Integrated Household Panel Survey and a Difference-in-Difference model to estimate causal effects of farmland restoration on household socioeconomic outcomes.",
       "canonical_reference": "FALSE",
       "umap_x": 14.398693084716797,
-      "umap_y": -0.5621719360351562
+      "umap_y": -0.5621719360351562,
+      "source_url": "https://www.sciencedirect.com/science/article/pii/S1470160X23002108",
+      "organization": "Peer-Reviewed Journal"
     },
     {
       "resource_id": "ks_058",
@@ -850,10 +962,12 @@
       "region": "Latin America and Caribbean",
       "publication_date": "2016-10",
       "page_count": 68,
-      "short_summary": "A WRI report monetizing costs and benefits of restoring 20 million hectares in Latin America and the Caribbean — the Initiative 20x20 target. Net annual flow gains turn positive by year 9.",
+      "short_summary": "A WRI report monetizing costs and benefits of restoring 20 million hectares in Latin America and the Caribbean \u2014 the Initiative 20x20 target. Net annual flow gains turn positive by year 9.",
       "canonical_reference": "TRUE",
       "umap_x": 13.496012687683105,
-      "umap_y": -1.1587743759155273
+      "umap_y": -1.1587743759155273,
+      "source_url": "https://www.wri.org/research/economic-case-landscape-restoration-latin-america",
+      "organization": "World Resources Institute"
     },
     {
       "resource_id": "ks_059",
@@ -868,7 +982,9 @@
       "short_summary": "A 74-page WRI Brasil Practice Note on the role of Assisted Natural Regeneration in accelerating forest and landscape restoration, drawing on practical field experiences.",
       "canonical_reference": "FALSE",
       "umap_x": 14.17924976348877,
-      "umap_y": 0.3598383367061615
+      "umap_y": 0.3598383367061615,
+      "source_url": "https://www.wri.org/research/assisted-natural-regeneration-case-studies",
+      "organization": "World Resources Institute"
     },
     {
       "resource_id": "ks_060",
@@ -880,10 +996,12 @@
       "region": "global",
       "publication_date": "2018-01",
       "page_count": 66,
-      "short_summary": "A 66-page joint WRI/TNC report profiling 14 restoration-linked businesses across four themes (technology, consumer products, project management, commercial forestry) — the foundational document for WRI's 'restoration enterprise' framing.",
+      "short_summary": "A 66-page joint WRI/TNC report profiling 14 restoration-linked businesses across four themes (technology, consumer products, project management, commercial forestry) \u2014 the foundational document for WRI's 'restoration enterprise' framing.",
       "canonical_reference": "TRUE",
       "umap_x": 13.527482986450195,
-      "umap_y": -2.7443549633026123
+      "umap_y": -2.7443549633026123,
+      "source_url": "https://www.wri.org/research/business-planting-trees-growing-investment-opportunity",
+      "organization": "World Resources Institute"
     },
     {
       "resource_id": "ks_061",
@@ -895,10 +1013,12 @@
       "region": "Latin America and Caribbean",
       "publication_date": "2025-05",
       "page_count": 120,
-      "short_summary": "A 120-page WRI report (May 2025) analyzing how to enhance climate finance access for Indigenous peoples and local communities through payments for ecosystem services — with deep case studies from Guatemala (INAB, Utz Che', FEDECOVERA).",
+      "short_summary": "A 120-page WRI report (May 2025) analyzing how to enhance climate finance access for Indigenous peoples and local communities through payments for ecosystem services \u2014 with deep case studies from Guatemala (INAB, Utz Che', FEDECOVERA).",
       "canonical_reference": "TRUE",
       "umap_x": 12.835247993469238,
-      "umap_y": -0.26281455159187317
+      "umap_y": -0.26281455159187317,
+      "source_url": "https://www.wri.org/research/climate-finance-access-indigenous-peoples-local-communities-payments-ecosystem-services",
+      "organization": "World Resources Institute"
     },
     {
       "resource_id": "ks_062",
@@ -913,7 +1033,9 @@
       "short_summary": "A 92-page WRI Guidebook (June 2025) for the financial sector on Nature-Based Solutions investment, introducing the 'INSPIRE' framework for aligning investments with NBS opportunities and showcasing real-world examples.",
       "canonical_reference": "TRUE",
       "umap_x": 12.591814994812012,
-      "umap_y": -0.9497365355491638
+      "umap_y": -0.9497365355491638,
+      "source_url": "https://www.wri.org/research/financial-sector-guidebook-nature-based-solutions-investment",
+      "organization": "World Resources Institute"
     },
     {
       "resource_id": "ks_063",
@@ -925,10 +1047,12 @@
       "region": "global",
       "publication_date": "2021-06",
       "page_count": 88,
-      "short_summary": "The WRI report underpinning the TACR Issue Brief series — examining how climate change impacts agriculture and why transformative (not just incremental) adaptation is needed to protect livelihoods of hundreds of millions of smallholder farmers and herders.",
+      "short_summary": "The WRI report underpinning the TACR Issue Brief series \u2014 examining how climate change impacts agriculture and why transformative (not just incremental) adaptation is needed to protect livelihoods of hundreds of millions of smallholder farmers and herders.",
       "canonical_reference": "TRUE",
       "umap_x": 11.90045166015625,
-      "umap_y": -0.12613023817539215
+      "umap_y": -0.12613023817539215,
+      "source_url": "https://www.wri.org/research/food-systems-risk",
+      "organization": "World Resources Institute"
     },
     {
       "resource_id": "ks_064",
@@ -940,10 +1064,12 @@
       "region": "global",
       "publication_date": "2023-10",
       "page_count": 24,
-      "short_summary": "A 24-page WRI Working Paper (v1.1, October 2023) arguing that gender-responsive agricultural adaptation is chronically underfunded — even the amounts reported as gender-responsive are likely inflated due to accounting challenges.",
+      "short_summary": "A 24-page WRI Working Paper (v1.1, October 2023) arguing that gender-responsive agricultural adaptation is chronically underfunded \u2014 even the amounts reported as gender-responsive are likely inflated due to accounting challenges.",
       "canonical_reference": "FALSE",
       "umap_x": 11.390077590942383,
-      "umap_y": -0.2323395311832428
+      "umap_y": -0.2323395311832428,
+      "source_url": "https://www.wri.org/research/why-gender-responsive-agricultural-adaptation-underfunded",
+      "organization": "World Resources Institute"
     },
     {
       "resource_id": "ks_065",
@@ -955,10 +1081,12 @@
       "region": "Sub-Saharan Africa",
       "publication_date": "2018-01",
       "page_count": 48,
-      "short_summary": "A 48-page WRI guide (January 2018) helping decision-makers in Sub-Saharan Africa select an appropriate ecosystem service model — covering InVEST, Co$ting Nature, WaterWorld, ARIES, and LPJ-GUESS — with a five-step selection process.",
+      "short_summary": "A 48-page WRI guide (January 2018) helping decision-makers in Sub-Saharan Africa select an appropriate ecosystem service model \u2014 covering InVEST, Co$ting Nature, WaterWorld, ARIES, and LPJ-GUESS \u2014 with a five-step selection process.",
       "canonical_reference": "TRUE",
       "umap_x": 15.171075820922852,
-      "umap_y": -0.36723199486732483
+      "umap_y": -0.36723199486732483,
+      "source_url": "https://www.wri.org/research/guide-selecting-ecosystem-service-models-decision-making-lessons-sub-saharan-africa",
+      "organization": "World Resources Institute"
     },
     {
       "resource_id": "ks_066",
@@ -970,10 +1098,12 @@
       "region": "Latin America and Caribbean",
       "publication_date": "2022-02",
       "page_count": 32,
-      "short_summary": "A WRI Issue Brief on the role of public economic incentives in scaling up restoration efforts across six Latin American countries — comparing incentive programs and distilling design recommendations.",
+      "short_summary": "A WRI Issue Brief on the role of public economic incentives in scaling up restoration efforts across six Latin American countries \u2014 comparing incentive programs and distilling design recommendations.",
       "canonical_reference": "TRUE",
       "umap_x": 13.180577278137207,
-      "umap_y": -1.4067493677139282
+      "umap_y": -1.4067493677139282,
+      "source_url": "https://www.wri.org/research/healing-wounded-land-public-economic-incentives-scaling-restoration-latin-america",
+      "organization": "World Resources Institute"
     },
     {
       "resource_id": "ks_067",
@@ -985,10 +1115,12 @@
       "region": "Sub-Saharan Africa",
       "publication_date": "2013-10",
       "page_count": 44,
-      "short_summary": "Installment 4 of WRI's 'Creating a Sustainable Food Future' working paper series (October 2013) — profiling agroforestry, conservation agriculture, rainwater harvesting, and integrated soil fertility management for Sub-Saharan drylands.",
+      "short_summary": "Installment 4 of WRI's 'Creating a Sustainable Food Future' working paper series (October 2013) \u2014 profiling agroforestry, conservation agriculture, rainwater harvesting, and integrated soil fertility management for Sub-Saharan drylands.",
       "canonical_reference": "FALSE",
       "umap_x": 13.384622573852539,
-      "umap_y": -0.75564044713974
+      "umap_y": -0.75564044713974,
+      "source_url": "https://www.wri.org/research/improving-land-and-water-management",
+      "organization": "World Resources Institute"
     },
     {
       "resource_id": "ks_068",
@@ -1000,10 +1132,12 @@
       "region": "Latin America and Caribbean",
       "publication_date": "2021-09",
       "page_count": 96,
-      "short_summary": "A 96-page WRI Brasil economic valuation of investing in Brazilian native tree species and agroforestry systems — the VERENA Project's flagship document, introducing the VERENA Investment Tool.",
+      "short_summary": "A 96-page WRI Brasil economic valuation of investing in Brazilian native tree species and agroforestry systems \u2014 the VERENA Project's flagship document, introducing the VERENA Investment Tool.",
       "canonical_reference": "TRUE",
       "umap_x": 13.305438041687012,
-      "umap_y": 0.5851682424545288
+      "umap_y": 0.5851682424545288,
+      "source_url": "https://www.wri.org/research/investing-native-tree-species-and-agroforestry-systems-brazil-economic-valuation",
+      "organization": "World Resources Institute"
     },
     {
       "resource_id": "ks_070",
@@ -1015,10 +1149,12 @@
       "region": "global",
       "publication_date": "2019-11",
       "page_count": 56,
-      "short_summary": "A 56-page WRI Working Paper commissioned by the Food and Land Use Coalition (FOLU) as part of its Growing Better report — identifying six economic and political economy barriers to scaling forest conservation and restoration, with strategies.",
+      "short_summary": "A 56-page WRI Working Paper commissioned by the Food and Land Use Coalition (FOLU) as part of its Growing Better report \u2014 identifying six economic and political economy barriers to scaling forest conservation and restoration, with strategies.",
       "canonical_reference": "TRUE",
       "umap_x": 13.74575138092041,
-      "umap_y": -0.36374223232269287
+      "umap_y": -0.36374223232269287,
+      "source_url": "https://www.wri.org/research/public-sector-measures-conserve-and-restore-forests-overcoming-economic-and-political",
+      "organization": "World Resources Institute"
     },
     {
       "resource_id": "ks_071",
@@ -1033,7 +1169,9 @@
       "short_summary": "A 56-page WRI Report on repurposing agricultural subsidies to restore degraded farmland and grow rural prosperity, with in-depth case studies from India, Brazil, and Mexico.",
       "canonical_reference": "TRUE",
       "umap_x": 13.71452808380127,
-      "umap_y": -0.7170696258544922
+      "umap_y": -0.7170696258544922,
+      "source_url": "https://www.wri.org/research/farm-restoration-subsidies",
+      "organization": "World Resources Institute"
     },
     {
       "resource_id": "ks_072",
@@ -1045,10 +1183,12 @@
       "region": "global",
       "publication_date": "2024-04",
       "page_count": 84,
-      "short_summary": "A 84-page WRI step-by-step guidebook for landscape restoration planners and practitioners — synthesizing WRI's restoration methodology into an accessible launchpad format.",
+      "short_summary": "A 84-page WRI step-by-step guidebook for landscape restoration planners and practitioners \u2014 synthesizing WRI's restoration methodology into an accessible launchpad format.",
       "canonical_reference": "TRUE",
       "umap_x": 14.858528137207031,
-      "umap_y": -0.40356945991516113
+      "umap_y": -0.40356945991516113,
+      "source_url": "https://www.wri.org/update/restoration-launchpad-guide-investors-landowners-and-practitioners",
+      "organization": "World Resources Institute"
     },
     {
       "resource_id": "ks_073",
@@ -1060,10 +1200,12 @@
       "region": "South Asia",
       "publication_date": "2020-11",
       "page_count": 104,
-      "short_summary": "A 104-page WRI India report on key findings from Sidhi district in Madhya Pradesh — combining field assessments, Collect Earth mapathons, and stakeholder consultations to diagnose restoration opportunities and barriers.",
+      "short_summary": "A 104-page WRI India report on key findings from Sidhi district in Madhya Pradesh \u2014 combining field assessments, Collect Earth mapathons, and stakeholder consultations to diagnose restoration opportunities and barriers.",
       "canonical_reference": "TRUE",
       "umap_x": 13.64622688293457,
-      "umap_y": -0.21739423274993896
+      "umap_y": -0.21739423274993896,
+      "source_url": "https://www.wri.org/research/restoring-landscapes-india-climate-and-communities",
+      "organization": "World Resources Institute"
     },
     {
       "resource_id": "ks_074",
@@ -1075,10 +1217,12 @@
       "region": "global",
       "publication_date": "2019-10",
       "page_count": 78,
-      "short_summary": "A 78-page joint FAO/WRI guide to identifying priorities and indicators for monitoring forest and landscape restoration — the parent framework that the Mapping Together Collect Earth mapathon guide (ks_053) operationalizes.",
+      "short_summary": "A 78-page joint FAO/WRI guide to identifying priorities and indicators for monitoring forest and landscape restoration \u2014 the parent framework that the Mapping Together Collect Earth mapathon guide (ks_053) operationalizes.",
       "canonical_reference": "TRUE",
       "umap_x": 15.192851066589355,
-      "umap_y": -0.7513541579246521
+      "umap_y": -0.7513541579246521,
+      "source_url": "https://www.wri.org/research/road-restoration",
+      "organization": "World Resources Institute"
     },
     {
       "resource_id": "ks_075",
@@ -1090,10 +1234,12 @@
       "region": "South Asia",
       "publication_date": "2022-03",
       "page_count": 52,
-      "short_summary": "A 52-page WRI India Working Paper mapping incentive policies, enabling conditions, and barriers for scaling Trees outside Forests (ToF) across six Indian states — Gujarat, Karnataka, Maharashtra, Odisha, Punjab, and Telangana.",
+      "short_summary": "A 52-page WRI India Working Paper mapping incentive policies, enabling conditions, and barriers for scaling Trees outside Forests (ToF) across six Indian states \u2014 Gujarat, Karnataka, Maharashtra, Odisha, Punjab, and Telangana.",
       "canonical_reference": "FALSE",
       "umap_x": 13.712858200073242,
-      "umap_y": 0.12397843599319458
+      "umap_y": 0.12397843599319458,
+      "source_url": "https://www.wri.org/research/roadmap-scaling-trees-outside-forests-india",
+      "organization": "World Resources Institute"
     },
     {
       "resource_id": "ks_076",
@@ -1105,10 +1251,12 @@
       "region": "global",
       "publication_date": "2017-12",
       "page_count": 80,
-      "short_summary": "Roots of Prosperity: The Economics and Finance of Restoring Land — the WRI flagship 80-page report on restoration finance, arguing every $1 invested generates $7-30 in economic benefits.",
+      "short_summary": "Roots of Prosperity: The Economics and Finance of Restoring Land \u2014 the WRI flagship 80-page report on restoration finance, arguing every $1 invested generates $7-30 in economic benefits.",
       "canonical_reference": "TRUE",
       "umap_x": 13.758405685424805,
-      "umap_y": -1.2906233072280884
+      "umap_y": -1.2906233072280884,
+      "source_url": "https://www.wri.org/research/roots-prosperity-economics-and-finance-restoring-land",
+      "organization": "World Resources Institute"
     },
     {
       "resource_id": "ks_077",
@@ -1120,10 +1268,12 @@
       "region": "Sub-Saharan Africa",
       "publication_date": "2015-05",
       "page_count": 72,
-      "short_summary": "Scaling Up Regreening: Six Steps to Success — the canonical Reij/Winterbottom 72-page practical guide to forest and landscape restoration based on evidence from the Sahel and beyond.",
+      "short_summary": "Scaling Up Regreening: Six Steps to Success \u2014 the canonical Reij/Winterbottom 72-page practical guide to forest and landscape restoration based on evidence from the Sahel and beyond.",
       "canonical_reference": "TRUE",
       "umap_x": 14.061777114868164,
-      "umap_y": -1.212956190109253
+      "umap_y": -1.212956190109253,
+      "source_url": "https://www.wri.org/research/scaling-regreening-six-steps-success",
+      "organization": "World Resources Institute"
     },
     {
       "resource_id": "ks_078",
@@ -1135,10 +1285,12 @@
       "region": "Latin America and Caribbean",
       "publication_date": "unknown",
       "page_count": 68,
-      "short_summary": "A 68-page WRI technical document introducing the Sustainability Index for Landscape Restoration (SILR) — a tool for monitoring the biophysical and socioeconomic impacts of landscape restoration, developed with El Salvador partners under German BMUB funding.",
+      "short_summary": "A 68-page WRI technical document introducing the Sustainability Index for Landscape Restoration (SILR) \u2014 a tool for monitoring the biophysical and socioeconomic impacts of landscape restoration, developed with El Salvador partners under German BMUB funding.",
       "canonical_reference": "TRUE",
       "umap_x": 14.289392471313477,
-      "umap_y": -0.4183168411254883
+      "umap_y": -0.4183168411254883,
+      "source_url": "https://www.wri.org/research/sustainability-index-landscape-restoration",
+      "organization": "World Resources Institute"
     },
     {
       "resource_id": "ks_079",
@@ -1150,10 +1302,12 @@
       "region": "global",
       "publication_date": "2023-07",
       "page_count": 176,
-      "short_summary": "The Global Land Squeeze — a 176-page WRI flagship report (2023) by Searchinger et al. analyzing competing demands on global land between food, carbon, biodiversity, and construction wood, using the CHARM model to project GHG consequences of alternative pathways.",
+      "short_summary": "The Global Land Squeeze \u2014 a 176-page WRI flagship report (2023) by Searchinger et al. analyzing competing demands on global land between food, carbon, biodiversity, and construction wood, using the CHARM model to project GHG consequences of alternative pathways.",
       "canonical_reference": "TRUE",
       "umap_x": 13.143123626708984,
-      "umap_y": -0.4270271360874176
+      "umap_y": -0.4270271360874176,
+      "source_url": "https://www.wri.org/research/global-land-squeeze-managing-growing-competition-land",
+      "organization": "World Resources Institute"
     },
     {
       "resource_id": "ks_080",
@@ -1168,7 +1322,9 @@
       "short_summary": "A WRI Insights commentary arguing that a new AI model (DINOv3-based remote sensing) can pinpoint where trees are regrowing and direct restoration finance to the most promising projects, illustrated with a Ghana mangrove case.",
       "canonical_reference": "FALSE",
       "umap_x": 14.15524959564209,
-      "umap_y": -2.7461206912994385
+      "umap_y": -2.7461206912994385,
+      "source_url": "https://www.wri.org/insights/ai-unlocking-nature-restoration-finance",
+      "organization": "World Resources Institute"
     },
     {
       "resource_id": "ks_081",
@@ -1180,10 +1336,12 @@
       "region": "global",
       "publication_date": "2025",
       "page_count": 18,
-      "short_summary": "A multi-organization policy brief making the case that policy coherence — across sectors, governance levels, and time — is a prerequisite for effective landscape and seascape restoration, with recommendations for governments, practitioners, and financiers.",
+      "short_summary": "A multi-organization policy brief making the case that policy coherence \u2014 across sectors, governance levels, and time \u2014 is a prerequisite for effective landscape and seascape restoration, with recommendations for governments, practitioners, and financiers.",
       "canonical_reference": "FALSE",
       "umap_x": 14.901443481445312,
-      "umap_y": -1.799034833908081
+      "umap_y": -1.799034833908081,
+      "source_url": null,
+      "organization": "World Resources Institute"
     },
     {
       "resource_id": "ks_082",
@@ -1195,10 +1353,12 @@
       "region": "Latin America and Caribbean",
       "publication_date": "2022-02-08",
       "page_count": 14,
-      "short_summary": "A WRI commentary identifying seven ways governments can use investments and policies — including PES, technical assistance, and land tenure reform — to support farmer-led landscape restoration, anchored in a Guatemala / INAB case.",
+      "short_summary": "A WRI commentary identifying seven ways governments can use investments and policies \u2014 including PES, technical assistance, and land tenure reform \u2014 to support farmer-led landscape restoration, anchored in a Guatemala / INAB case.",
       "canonical_reference": "FALSE",
       "umap_x": 13.00480842590332,
-      "umap_y": -2.17225980758667
+      "umap_y": -2.17225980758667,
+      "source_url": "https://www.wri.org/insights/public-incentives-land-restoration-latin-america",
+      "organization": "World Resources Institute"
     },
     {
       "resource_id": "ks_083",
@@ -1210,10 +1370,12 @@
       "region": "global",
       "publication_date": "2023-04-14",
       "page_count": 12,
-      "short_summary": "A WRI commentary on emerging evidence that forest restoration delivers non-carbon climate benefits — particularly cooling effects and rainfall regulation through evapotranspiration — and frames why this matters for restoration policy and practice.",
+      "short_summary": "A WRI commentary on emerging evidence that forest restoration delivers non-carbon climate benefits \u2014 particularly cooling effects and rainfall regulation through evapotranspiration \u2014 and frames why this matters for restoration policy and practice.",
       "canonical_reference": "FALSE",
       "umap_x": 14.016191482543945,
-      "umap_y": -3.3069705963134766
+      "umap_y": -3.3069705963134766,
+      "source_url": "https://www.wri.org/insights/restoring-degraded-forests-temperature-precipitation-effects",
+      "organization": "World Resources Institute"
     },
     {
       "resource_id": "ks_084",
@@ -1228,7 +1390,9 @@
       "short_summary": "A WRI Project Update introducing the TerraMatch / Restore Local approach to MRV for restoration: a unified framework for monitoring, reporting, and verification across hundreds of African TerraFund projects. Companion piece to the 2026 'Land restoration from planting to proof' guidebook.",
       "canonical_reference": "FALSE",
       "umap_x": 15.603580474853516,
-      "umap_y": -1.3373154401779175
+      "umap_y": -1.3373154401779175,
+      "source_url": "https://www.wri.org/update/land-degradation-project-recipe-for-restoration",
+      "organization": "World Resources Institute"
     },
     {
       "resource_id": "ks_085",
@@ -1243,7 +1407,9 @@
       "short_summary": "A WRI Insights piece summarizing a study on how to scale up nature-based solutions for climate adaptation, surveying political momentum (Glasgow Declaration, Adaptation Fund pledges) and articulating opportunities across ecosystems.",
       "canonical_reference": "FALSE",
       "umap_x": 12.425002098083496,
-      "umap_y": -0.9923385381698608
+      "umap_y": -0.9923385381698608,
+      "source_url": "https://www.wri.org/insights/how-scale-nature-based-solutions-adaptation",
+      "organization": "World Resources Institute"
     },
     {
       "resource_id": "ks_086",
@@ -1255,10 +1421,12 @@
       "region": "Latin America and Caribbean",
       "publication_date": "2025-04-10",
       "page_count": 14,
-      "short_summary": "A WRI Insights piece presenting new University of Maryland satellite data on tree cover gains and losses across Latin America (2015–2023), assessing Initiative 20x20 progress at the country level five years out from 2030.",
+      "short_summary": "A WRI Insights piece presenting new University of Maryland satellite data on tree cover gains and losses across Latin America (2015\u20132023), assessing Initiative 20x20 progress at the country level five years out from 2030.",
       "canonical_reference": "FALSE",
       "umap_x": 13.830867767333984,
-      "umap_y": -3.800743341445923
+      "umap_y": -3.800743341445923,
+      "source_url": "https://www.wri.org/insights/tree-cover-declining-latin-america-new-data-shows-where-increasing",
+      "organization": "World Resources Institute"
     },
     {
       "resource_id": "ks_087",
@@ -1270,10 +1438,12 @@
       "region": "Latin America and Caribbean",
       "publication_date": "2021-11",
       "page_count": 84,
-      "short_summary": "A 2021 Brazilian Coalition / WRI Brasil report evaluating 40 economic models of native-species reforestation in Brazil — silviculture, agroforestry systems, and crop-livestock-forest integration — and finding 32 of 40 models have ROI between 9.5% and 28.4%/year.",
+      "short_summary": "A 2021 Brazilian Coalition / WRI Brasil report evaluating 40 economic models of native-species reforestation in Brazil \u2014 silviculture, agroforestry systems, and crop-livestock-forest integration \u2014 and finding 32 of 40 models have ROI between 9.5% and 28.4%/year.",
       "canonical_reference": "TRUE",
       "umap_x": 13.024314880371094,
-      "umap_y": 0.8059914708137512
+      "umap_y": 0.8059914708137512,
+      "source_url": "https://initiative20x20.org/publications/reforestation-native-species-case-studies-economic-viability-and-environmental",
+      "organization": "Initiative 20x20"
     },
     {
       "resource_id": "ks_088",
@@ -1285,10 +1455,12 @@
       "region": "global",
       "publication_date": "2015",
       "page_count": 96,
-      "short_summary": "The Restoration Diagnostic — a foundational 2015 WRI methodology for rapidly assessing the status of key success factors for forest landscape restoration in a given area, organized as a three-step diagnostic with strategy guidance for missing factors.",
+      "short_summary": "The Restoration Diagnostic \u2014 a foundational 2015 WRI methodology for rapidly assessing the status of key success factors for forest landscape restoration in a given area, organized as a three-step diagnostic with strategy guidance for missing factors.",
       "canonical_reference": "TRUE",
       "umap_x": 14.778960227966309,
-      "umap_y": -0.442203551530838
+      "umap_y": -0.442203551530838,
+      "source_url": "https://www.wri.org/publication/restoration-diagnostic",
+      "organization": "World Resources Institute"
     },
     {
       "resource_id": "ks_089",
@@ -1300,10 +1472,12 @@
       "region": "North America",
       "publication_date": "2020-04",
       "page_count": 4,
-      "short_summary": "A 2020 WRI COVID-19 Special Expert Note arguing that an annual federal investment of $4–4.5 billion in US tree restoration could create 150,000+ jobs and $6–12 billion in annual economic activity, while restoring up to 60 billion trees over 20 years.",
+      "short_summary": "A 2020 WRI COVID-19 Special Expert Note arguing that an annual federal investment of $4\u20134.5 billion in US tree restoration could create 150,000+ jobs and $6\u201312 billion in annual economic activity, while restoring up to 60 billion trees over 20 years.",
       "canonical_reference": "FALSE",
       "umap_x": 13.961678504943848,
-      "umap_y": -2.5475010871887207
+      "umap_y": -2.5475010871887207,
+      "source_url": "https://www.wri.org/research/restoring-trees-landscape-creating-shovel-ready-jobs-across-united-states",
+      "organization": "World Resources Institute"
     },
     {
       "resource_id": "ks_090",
@@ -1318,7 +1492,9 @@
       "short_summary": "A WRI working paper assessing the applicability of innovative financing mechanisms (PES, blended finance, water funds, green bonds) to nature-based watershed management in Ethiopia, given persistent land and water degradation despite a long restoration history.",
       "canonical_reference": "FALSE",
       "umap_x": 13.266845703125,
-      "umap_y": -0.8512850999832153
+      "umap_y": -0.8512850999832153,
+      "source_url": "https://www.wri.org/research/financing-sustainable-watershed-management-ethiopia-exploring-innovative-financing",
+      "organization": "World Resources Institute"
     },
     {
       "resource_id": "ks_091",
@@ -1333,7 +1509,9 @@
       "short_summary": "A 2025 World Bank / WRI / AfDB joint report (version 2) on unlocking nature-based solutions for climate resilience in Sub-Saharan Africa: analyzes MDB project data, surveys financing instruments, and provides recommendations for scaling NbS investment.",
       "canonical_reference": "TRUE",
       "umap_x": 12.513843536376953,
-      "umap_y": -0.24464458227157593
+      "umap_y": -0.24464458227157593,
+      "source_url": "https://www.wri.org/research/nbs-climate-resilience-sub-saharan-africa",
+      "organization": "World Resources Institute"
     },
     {
       "resource_id": "ks_092",
@@ -1345,10 +1523,12 @@
       "region": "Sub-Saharan Africa",
       "publication_date": "2026",
       "page_count": 120,
-      "short_summary": "WRI's 2026 flagship guidebook on monitoring, reporting, and verification (MRV) for land restoration projects — built from the TerraMatch / Restore Local experience funding and tracking ~200 African restoration champions since 2022.",
+      "short_summary": "WRI's 2026 flagship guidebook on monitoring, reporting, and verification (MRV) for land restoration projects \u2014 built from the TerraMatch / Restore Local experience funding and tracking ~200 African restoration champions since 2022.",
       "canonical_reference": "TRUE",
       "umap_x": 15.612225532531738,
-      "umap_y": -0.20146887004375458
+      "umap_y": -0.20146887004375458,
+      "source_url": "https://www.wri.org/research/land-restoration-planting-proof-guide-monitoring-reporting-and-verification",
+      "organization": "World Resources Institute"
     },
     {
       "resource_id": "ks_093",
@@ -1360,10 +1540,12 @@
       "region": "Sub-Saharan Africa",
       "publication_date": "2025-12",
       "page_count": 23,
-      "short_summary": "A WRI Technical Note presenting a transfer-learning approach using a CNN to differentiate natural, monoculture, and agroforestry tree-based systems in Ghana from remote sensing imagery — addressing a label-scarce classification problem.",
+      "short_summary": "A WRI Technical Note presenting a transfer-learning approach using a CNN to differentiate natural, monoculture, and agroforestry tree-based systems in Ghana from remote sensing imagery \u2014 addressing a label-scarce classification problem.",
       "canonical_reference": "FALSE",
       "umap_x": 15.405278205871582,
-      "umap_y": 0.10795412212610245
+      "umap_y": 0.10795412212610245,
+      "source_url": "https://www.wri.org/research/transfer-learning-detect-natural-monoculture-and-agroforestry-tree-based-systems-ghana",
+      "organization": "World Resources Institute"
     },
     {
       "resource_id": "ks_094",
@@ -1375,10 +1557,12 @@
       "region": "global",
       "publication_date": "2023-12",
       "page_count": 80,
-      "short_summary": "The ANR Alliance's foundational status report on Assisted Natural Regeneration — a comprehensive synthesis of what ANR is, its socio-economic and ecological goals, who practices it, where the best opportunities exist, and what policies, costs, and enabling factors support it.",
+      "short_summary": "The ANR Alliance's foundational status report on Assisted Natural Regeneration \u2014 a comprehensive synthesis of what ANR is, its socio-economic and ecological goals, who practices it, where the best opportunities exist, and what policies, costs, and enabling factors support it.",
       "canonical_reference": "TRUE",
       "umap_x": 14.38053035736084,
-      "umap_y": 0.5504528284072876
+      "umap_y": 0.5504528284072876,
+      "source_url": "https://static1.squarespace.com/static/621d10076f3b6e76b2619f78/t/66636ab7675b2d6c45d62293/1717791419989/wri-anr-alliance-report-white-paper-2024.pdf",
+      "organization": "ANR Alliance"
     }
   ],
   "n_docs": 92

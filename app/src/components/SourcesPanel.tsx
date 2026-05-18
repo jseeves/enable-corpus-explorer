@@ -1,0 +1,183 @@
+"use client";
+
+import { useEffect, useState } from "react";
+
+interface Doc {
+  resource_id: string;
+  title: string;
+  document_type: string;
+  organization: string;
+  source_url: string | null;
+  short_summary: string;
+}
+
+interface CitationData {
+  resource_id: string;
+  title: string;
+  page_num: number;
+  score: number;
+  excerpt: string;
+}
+
+interface Props {
+  citations: CitationData[];
+}
+
+const ORG_COLORS: Record<string, { bg: string; text: string }> = {
+  "World Resources Institute": { bg: "bg-green-700", text: "text-white" },
+  "WRI Brasil":                { bg: "bg-green-700", text: "text-white" },
+  "FAO":                       { bg: "bg-blue-700",  text: "text-white" },
+  "Initiative 20x20":          { bg: "bg-emerald-600", text: "text-white" },
+  "ANR Alliance":              { bg: "bg-teal-700",  text: "text-white" },
+};
+
+function orgBadgeClasses(org: string) {
+  const c = ORG_COLORS[org];
+  return c ? `${c.bg} ${c.text}` : "bg-stone-200 text-stone-700";
+}
+
+function orgShortName(org: string) {
+  const map: Record<string, string> = {
+    "World Resources Institute": "WRI",
+    "WRI Brasil": "WRI Brasil",
+    "PROFOR / World Bank": "World Bank",
+    "Peer-Reviewed Journal": "Journal",
+    "Academic (arXiv)": "arXiv",
+  };
+  return map[org] ?? org;
+}
+
+function docTypeLabel(t: string) {
+  return t.replace(/_/g, " ");
+}
+
+export default function SourcesPanel({ citations }: Props) {
+  const [corpus, setCorpus] = useState<Map<string, Doc>>(new Map());
+
+  useEffect(() => {
+    fetch("/api/corpus")
+      .then((r) => r.json())
+      .then((d: { docs: Doc[] }) => {
+        setCorpus(new Map(d.docs.map((doc) => [doc.resource_id, doc])));
+      })
+      .catch(() => {});
+  }, []);
+
+  const isEmpty = citations.length === 0;
+
+  return (
+    <div className="h-full flex flex-col border-l border-stone-200 bg-stone-50">
+      {/* Header */}
+      <div className="shrink-0 border-b border-stone-200 px-4 py-3 flex items-center gap-2 bg-white">
+        <span className="text-sm font-semibold text-stone-900">Sources</span>
+        {!isEmpty && (
+          <span className="text-[11px] bg-green-100 text-green-800 font-medium px-1.5 py-0.5 rounded-full">
+            {citations.length}
+          </span>
+        )}
+      </div>
+
+      {/* Content */}
+      <div className="flex-1 overflow-y-auto min-h-0 px-3 py-3 space-y-3">
+        {isEmpty ? (
+          <EmptyState />
+        ) : (
+          citations.map((c) => {
+            const doc = corpus.get(c.resource_id);
+            return (
+              <SourceCard key={c.resource_id} citation={c} doc={doc ?? null} />
+            );
+          })
+        )}
+      </div>
+    </div>
+  );
+}
+
+function EmptyState() {
+  return (
+    <div className="flex flex-col items-center justify-center h-full pb-16 px-4 text-center">
+      <div className="w-8 h-8 rounded-full border-2 border-dashed border-stone-300 flex items-center justify-center mb-3">
+        <span className="text-stone-300 text-xs">✦</span>
+      </div>
+      <p className="text-xs text-stone-400 leading-relaxed">
+        Sources cited in each answer will appear here with links to the original documents.
+      </p>
+    </div>
+  );
+}
+
+function SourceCard({ citation, doc }: { citation: CitationData; doc: Doc | null }) {
+  const [expanded, setExpanded] = useState(false);
+  const org = doc?.organization ?? "World Resources Institute";
+  const title = doc?.title ?? citation.title;
+  const docType = doc?.document_type ?? "";
+  const sourceUrl = doc?.source_url ?? null;
+
+  return (
+    <div className="bg-white rounded-lg border border-stone-200 overflow-hidden">
+      {/* Top: org + type badges */}
+      <div className="px-3 pt-3 pb-2 flex items-center gap-1.5 flex-wrap">
+        <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${orgBadgeClasses(org)}`}>
+          {orgShortName(org)}
+        </span>
+        {docType && (
+          <span className="text-[10px] text-stone-500 bg-stone-100 px-2 py-0.5 rounded-full capitalize">
+            {docTypeLabel(docType)}
+          </span>
+        )}
+      </div>
+
+      {/* Title */}
+      <div className="px-3 pb-2">
+        {sourceUrl ? (
+          <a
+            href={sourceUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-[13px] font-medium text-stone-900 leading-snug hover:text-green-700 hover:underline transition-colors"
+          >
+            {title}
+          </a>
+        ) : (
+          <p className="text-[13px] font-medium text-stone-900 leading-snug">{title}</p>
+        )}
+      </div>
+
+      {/* Page + excerpt toggle */}
+      <div className="px-3 pb-3 border-t border-stone-100 pt-2">
+        <button
+          onClick={() => setExpanded(!expanded)}
+          className="flex items-center gap-1.5 text-[11px] text-stone-400 hover:text-stone-600 transition-colors"
+        >
+          <span className="font-mono">p.{citation.page_num}</span>
+          <span className="text-stone-300">·</span>
+          <span>{expanded ? "Hide passage" : "Show passage"}</span>
+          <span className="text-[10px]">{expanded ? "▲" : "▼"}</span>
+        </button>
+        {expanded && (
+          <p className="mt-2 text-xs text-stone-500 leading-relaxed italic border-l-2 border-stone-200 pl-2">
+            "…{citation.excerpt}…"
+          </p>
+        )}
+      </div>
+
+      {/* Source link footer */}
+      {sourceUrl && (
+        <div className="px-3 pb-2.5 -mt-1">
+          <a
+            href={sourceUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-[11px] text-green-700 hover:text-green-800 font-medium flex items-center gap-1"
+          >
+            View source
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 12" fill="currentColor" className="w-2.5 h-2.5">
+              <path d="M6.5 1.5h4v4M10.5 1.5 5 7M3 2.5H1.5v9h9V10" stroke="currentColor" strokeWidth="1.2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </a>
+        </div>
+      )}
+    </div>
+  );
+}
