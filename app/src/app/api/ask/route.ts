@@ -114,24 +114,34 @@ export async function POST(req: NextRequest) {
 }
 
 function dedupeByResourceId(chunks: RetrievedChunk[]) {
-  const seen = new Set<string>();
-  const out: Array<{
-    resource_id: string;
-    title: string;
-    page_num: number;
-    score: number;
-    excerpt: string;
-  }> = [];
+  const grouped = new Map<string, RetrievedChunk[]>();
   for (const c of chunks) {
-    if (seen.has(c.resource_id)) continue;
-    seen.add(c.resource_id);
-    out.push({
-      resource_id: c.resource_id,
-      title: (c.metadata?.title as string) || c.resource_id,
-      page_num: c.page_num,
-      score: c.score,
-      excerpt: c.text,
-    });
+    if (!grouped.has(c.resource_id)) grouped.set(c.resource_id, []);
+    grouped.get(c.resource_id)!.push(c);
   }
-  return out;
+
+  return Array.from(grouped.entries()).map(([resource_id, group]) => {
+    // Sort by chunk_id (e.g. ks_049_c0042) so text reads in document order
+    group.sort((a, b) => a.chunk_id.localeCompare(b.chunk_id));
+    const best = group[0];
+    // Join all retrieved chunks for this doc, separated where non-adjacent
+    const excerpt = group
+      .map((c, i) => {
+        if (i === 0) return c.text;
+        const prevId = group[i - 1].chunk_id;
+        const curId = c.chunk_id;
+        const prevIdx = parseInt(prevId.split("_c")[1] ?? "0", 10);
+        const curIdx = parseInt(curId.split("_c")[1] ?? "0", 10);
+        return curIdx - prevIdx <= 2 ? c.text : `[…] ${c.text}`;
+      })
+      .join(" ");
+
+    return {
+      resource_id,
+      title: (best.metadata?.title as string) || resource_id,
+      page_num: best.page_num,
+      score: best.score,
+      excerpt,
+    };
+  });
 }
