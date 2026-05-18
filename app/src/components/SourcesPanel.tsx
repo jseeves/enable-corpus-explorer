@@ -107,16 +107,43 @@ function EmptyState() {
   );
 }
 
+const TEASER_LENGTH = 180;
+
+function PassageSegments({ text }: { text: string }) {
+  const segments = text.split(/\s*\[…\]\s*/);
+  return (
+    <div className="space-y-2">
+      {segments.map((seg, i) => (
+        <div key={i}>
+          {i > 0 && (
+            <div className="flex items-center gap-2 my-2">
+              <div className="flex-1 border-t border-dashed border-stone-200" />
+              <span className="text-[10px] text-stone-300 font-mono">gap in document</span>
+              <div className="flex-1 border-t border-dashed border-stone-200" />
+            </div>
+          )}
+          <p className="text-[12px] text-stone-600 leading-relaxed">{seg.trim()}</p>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 function SourceCard({ citation, doc }: { citation: CitationData; doc: Doc | null }) {
   const [expanded, setExpanded] = useState(false);
   const org = doc?.organization ?? "World Resources Institute";
   const title = doc?.title ?? citation.title;
   const docType = doc?.document_type ?? "";
   const sourceUrl = doc?.source_url ?? null;
+  const excerpt = citation.excerpt ?? "";
+  const teaser = excerpt.length > TEASER_LENGTH
+    ? excerpt.slice(0, TEASER_LENGTH).trimEnd() + "…"
+    : excerpt;
+  const hasMore = excerpt.length > TEASER_LENGTH;
 
   return (
     <div className="bg-white rounded-lg border border-stone-200 overflow-hidden">
-      {/* Top: org + type badges */}
+      {/* Org + type badges */}
       <div className="px-3 pt-3 pb-2 flex items-center gap-1.5 flex-wrap">
         <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${orgBadgeClasses(org)}`}>
           {orgShortName(org)}
@@ -129,7 +156,7 @@ function SourceCard({ citation, doc }: { citation: CitationData; doc: Doc | null
       </div>
 
       {/* Title */}
-      <div className="px-3 pb-2">
+      <div className="px-3 pb-3">
         {sourceUrl ? (
           <a
             href={sourceUrl}
@@ -144,27 +171,33 @@ function SourceCard({ citation, doc }: { citation: CitationData; doc: Doc | null
         )}
       </div>
 
-      {/* Page + excerpt toggle */}
-      <div className="px-3 pb-3 border-t border-stone-100 pt-2">
-        <button
-          onClick={() => setExpanded(!expanded)}
-          className="flex items-center gap-1.5 text-[11px] text-stone-400 hover:text-stone-600 transition-colors"
-        >
-          <span className="font-mono">p.{citation.page_num}</span>
-          <span className="text-stone-300">·</span>
-          <span>{expanded ? "Hide passage" : "Show passage"}</span>
-          <span className="text-[10px]">{expanded ? "▲" : "▼"}</span>
-        </button>
-        {expanded && (
-          <p className="mt-2 text-xs text-stone-500 leading-relaxed italic border-l-2 border-stone-200 pl-2">
-            "…{citation.excerpt}…"
+      {/* Passage */}
+      {excerpt && (
+        <div className="px-3 pb-3 border-t border-stone-100 pt-3">
+          <p className="text-[10px] text-stone-400 uppercase tracking-wider mb-2">
+            p.{citation.page_num} · Retrieved passage
           </p>
-        )}
-      </div>
+          <div className="bg-stone-50 rounded-md p-2.5">
+            {expanded ? (
+              <PassageSegments text={excerpt} />
+            ) : (
+              <p className="text-[12px] text-stone-600 leading-relaxed">{teaser}</p>
+            )}
+            {hasMore && (
+              <button
+                onClick={() => setExpanded(!expanded)}
+                className="mt-2 text-[11px] text-green-700 hover:text-green-800 font-medium"
+              >
+                {expanded ? "Show less ▲" : "Read full passage ▼"}
+              </button>
+            )}
+          </div>
+        </div>
+      )}
 
-      {/* Source link footer */}
+      {/* Source link */}
       {sourceUrl && (
-        <div className="px-3 pb-2.5 -mt-1">
+        <div className="px-3 pb-3 -mt-1">
           <a
             href={sourceUrl}
             target="_blank"

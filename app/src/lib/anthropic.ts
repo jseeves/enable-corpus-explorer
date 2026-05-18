@@ -66,7 +66,7 @@ export async function generateAnswer(question: string, chunks: RetrievedChunk[])
 
   const response = await getClient().messages.create({
     model: MODEL,
-    max_tokens: 600,
+    max_tokens: 1500,
     system: ANSWER_SYSTEM,
     messages: [{ role: "user", content: userMessage }],
   });
@@ -109,7 +109,7 @@ export async function* streamAnswer(
 
   const stream = getClient().messages.stream({
     model: MODEL,
-    max_tokens: 600,
+    max_tokens: 1500,
     system: ANSWER_SYSTEM,
     messages: [{ role: "user", content: userMessage }],
   });
