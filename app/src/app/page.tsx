@@ -65,22 +65,10 @@ export default function Home() {
       <div className="flex flex-1 min-h-0">
         {view === "explorer" ? (
           <>
-            {/* Left: visualization (collapsible) */}
-            <div className={`${mapCollapsed ? "w-8" : "w-[48%]"} transition-[width] duration-300 ease-in-out border-r border-stone-200 flex flex-col min-h-0 shrink-0 overflow-hidden`}>
-              {mapCollapsed ? (
-                <button
-                  onClick={() => setMapCollapsed(false)}
-                  title="Expand map"
-                  className="flex-1 flex flex-col items-center justify-start pt-4 gap-3 w-full text-stone-400 hover:text-stone-600 hover:bg-stone-50 transition-colors"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-3.5 h-3.5 shrink-0">
-                    <path d="M6 3l5 5-5 5" />
-                  </svg>
-                  <span className="text-[10px] uppercase tracking-widest font-medium text-stone-300" style={{ writingMode: "vertical-rl" }}>
-                    Map
-                  </span>
-                </button>
-              ) : (
+            {/* Left: visualization (collapsible) — always mounted so Plotly doesn't reinitialise */}
+            <div className={`relative ${mapCollapsed ? "w-8" : "w-[48%]"} transition-[width] duration-300 ease-in-out border-r border-stone-200 flex flex-col min-h-0 shrink-0 overflow-hidden`}>
+              {/* CorpusExplorer stays mounted; hidden via opacity when collapsed so Plotly resizes cleanly */}
+              <div className={`absolute inset-0 transition-opacity duration-150 ${mapCollapsed ? "opacity-0 pointer-events-none" : "opacity-100"}`}>
                 <CorpusExplorer
                   citedIds={citedIds}
                   focusedDocId={focusedDocId}
@@ -90,6 +78,21 @@ export default function Home() {
                   onCollapse={() => setMapCollapsed(true)}
                   lastQuery={lastQuery}
                 />
+              </div>
+              {/* Strip overlay — shown when collapsed */}
+              {mapCollapsed && (
+                <button
+                  onClick={() => setMapCollapsed(false)}
+                  title="Expand map"
+                  className="absolute inset-0 flex flex-col items-center justify-start pt-4 gap-3 text-stone-400 hover:text-stone-600 hover:bg-stone-50 transition-colors"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-3.5 h-3.5 shrink-0">
+                    <path d="M6 3l5 5-5 5" />
+                  </svg>
+                  <span className="text-[10px] uppercase tracking-widest font-medium text-stone-300" style={{ writingMode: "vertical-rl" }}>
+                    Map
+                  </span>
+                </button>
               )}
             </div>
             {/* Middle: chat */}
@@ -105,13 +108,14 @@ export default function Home() {
                 explanationTrigger={explanationTrigger}
               />
             </div>
-            {/* Right: sources (widens when map is collapsed) */}
-            <div className={`${mapCollapsed ? "w-96" : "w-72"} transition-[width] duration-300 ease-in-out flex flex-col min-h-0 shrink-0`}>
+            {/* Right: sources — widens to ~2/5 of screen when map is collapsed */}
+            <div className={`${mapCollapsed ? "w-[580px]" : "w-72"} transition-[width] duration-300 ease-in-out flex flex-col min-h-0 shrink-0`}>
               <SourcesPanel
                 citations={citationsFull}
                 focusedDocId={focusedDocId}
                 hoveredDocId={hoveredDocId}
                 onHoverSource={setHoveredDocId}
+                wide={mapCollapsed}
               />
             </div>
           </>

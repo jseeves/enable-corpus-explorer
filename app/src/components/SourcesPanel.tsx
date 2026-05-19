@@ -25,6 +25,7 @@ interface Props {
   focusedDocId: string | null;
   hoveredDocId: string | null;
   onHoverSource: (id: string | null) => void;
+  wide?: boolean;
 }
 
 const ORG_COLORS: Record<string, { bg: string; text: string }> = {
@@ -55,7 +56,7 @@ function docTypeLabel(t: string) {
   return t.replace(/_/g, " ");
 }
 
-export default function SourcesPanel({ citations, focusedDocId, hoveredDocId, onHoverSource }: Props) {
+export default function SourcesPanel({ citations, focusedDocId, hoveredDocId, onHoverSource, wide = false }: Props) {
   const [corpus, setCorpus] = useState<Map<string, Doc>>(new Map());
 
   useEffect(() => {
@@ -82,7 +83,7 @@ export default function SourcesPanel({ citations, focusedDocId, hoveredDocId, on
       </div>
 
       {/* Content */}
-      <div className="flex-1 overflow-y-auto min-h-0 px-3 py-3 space-y-3">
+      <div className={`flex-1 overflow-y-auto min-h-0 p-3 ${wide ? "grid grid-cols-2 gap-3 content-start" : "space-y-3"}`}>
         {isEmpty ? (
           <EmptyState />
         ) : (

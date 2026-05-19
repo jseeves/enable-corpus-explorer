@@ -12,5 +12,5 @@ module.exports = {
     },
   },
   plugins: [],
-  safelist: ["transition-[width]"],
+  safelist: ["transition-[width]", "w-[580px]", "grid-cols-2"],
 };
