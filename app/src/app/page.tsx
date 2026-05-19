@@ -23,6 +23,7 @@ export default function Home() {
   const [focusedDocId, setFocusedDocId] = useState<string | null>(null);
   const [hoveredDocId, setHoveredDocId] = useState<string | null>(null);
   const [mapCollapsed, setMapCollapsed] = useState(false);
+  const [mapMounted, setMapMounted] = useState(true);
   const [lastQuery, setLastQuery] = useState("");
   const [explanationTrigger] = useState(1);
   const [view, setView] = useState<View>("explorer");
@@ -65,24 +66,30 @@ export default function Home() {
       <div className="flex flex-1 min-h-0">
         {view === "explorer" ? (
           <>
-            {/* Left: visualization (collapsible) — always mounted so Plotly doesn't reinitialise */}
+            {/* Left: visualization (collapsible) */}
             <div className={`relative ${mapCollapsed ? "w-8" : "w-[48%]"} transition-[width] duration-300 ease-in-out border-r border-stone-200 flex flex-col min-h-0 shrink-0 overflow-hidden`}>
-              {/* CorpusExplorer stays mounted; hidden via opacity when collapsed so Plotly resizes cleanly */}
-              <div className={`absolute inset-0 transition-opacity duration-150 ${mapCollapsed ? "opacity-0 pointer-events-none" : "opacity-100"}`}>
+              {/* Unmount on collapse; remount after expand transition so Plotly initialises at full width */}
+              {mapMounted && (
                 <CorpusExplorer
                   citedIds={citedIds}
                   focusedDocId={focusedDocId}
                   hoveredDocId={hoveredDocId}
                   onFocusDoc={setFocusedDocId}
                   onHoverDoc={setHoveredDocId}
-                  onCollapse={() => setMapCollapsed(true)}
+                  onCollapse={() => {
+                    setMapMounted(false);
+                    setMapCollapsed(true);
+                  }}
                   lastQuery={lastQuery}
                 />
-              </div>
-              {/* Strip overlay — shown when collapsed */}
+              )}
+              {/* Strip — shown when collapsed */}
               {mapCollapsed && (
                 <button
-                  onClick={() => setMapCollapsed(false)}
+                  onClick={() => {
+                    setMapCollapsed(false);
+                    setTimeout(() => setMapMounted(true), 310);
+                  }}
                   title="Expand map"
                   className="absolute inset-0 flex flex-col items-center justify-start pt-4 gap-3 text-stone-400 hover:text-stone-600 hover:bg-stone-50 transition-colors"
                 >
