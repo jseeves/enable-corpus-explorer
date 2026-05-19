@@ -40,6 +40,15 @@ interface Props {
   explanationTrigger: number;
 }
 
+function isNoAnswerResponse(text: string): boolean {
+  const t = text.trim();
+  return (
+    t.startsWith("I don't have relevant information") ||
+    t.startsWith("No directly relevant documents") ||
+    t.startsWith("This question is outside the scope")
+  );
+}
+
 const EXPLANATION =
 `Each dot to the left represents a document in the Enable corpus (guides, research papers, policy briefs, field reports, etc.)
 
@@ -141,6 +150,7 @@ export default function ChatInterface({ onCitations, onCitationsFull, onFocusDoc
       const reader = res.body!.getReader();
       const decoder = new TextDecoder();
       let buffer = "";
+      let answerText = "";
 
       while (true) {
         const { done, value } = await reader.read();
@@ -159,6 +169,7 @@ export default function ChatInterface({ onCitations, onCitationsFull, onFocusDoc
           }
 
           if (evt.type === "delta" && evt.text) {
+            answerText += evt.text;
             setMessages((prev) => {
               const next = [...prev];
               const last = next[next.length - 1];
@@ -166,14 +177,16 @@ export default function ChatInterface({ onCitations, onCitationsFull, onFocusDoc
               return next;
             });
           } else if (evt.type === "citations" && evt.citations) {
-            // Light up the visualization and populate sources panel
-            onCitations(evt.citations.map((c) => c.resource_id), q);
-            onCitationsFull(evt.citations);
-            setMessages((prev) => {
-              const next = [...prev];
-              next[next.length - 1] = { ...next[next.length - 1], citations: evt.citations };
-              return next;
-            });
+            // Suppress visualization and sources panel when the model has no answer
+            if (!isNoAnswerResponse(answerText)) {
+              onCitations(evt.citations.map((c) => c.resource_id), q);
+              onCitationsFull(evt.citations);
+              setMessages((prev) => {
+                const next = [...prev];
+                next[next.length - 1] = { ...next[next.length - 1], citations: evt.citations };
+                return next;
+              });
+            }
           } else if (evt.type === "error") {
             throw new Error(evt.message || "Stream error");
           }
@@ -396,7 +409,8 @@ function renderInline(
   keyOffset: { n: number },
 ): React.ReactNode[] {
   const parts: React.ReactNode[] = [];
-  const re = /(\*\*([^*]+)\*\*|\[((?:ks_\d+(?:,\s*)?)+)\])/g;
+  // Match **bold** and citation brackets like [ks_053], [ks_053, ks_054], or [ks_053, p.50]
+  const re = /(\*\*([^*]+)\*\*|\[(ks_\d+(?:[,\s]+(?:ks_\d+|p\.?\s*\d+|page\s*\d+))*)\])/g;
   let last = 0;
   let match: RegExpExecArray | null;
   while ((match = re.exec(text)) !== null) {
@@ -404,7 +418,8 @@ function renderInline(
     if (match[0].startsWith("**")) {
       parts.push(<strong key={keyOffset.n++} className="font-semibold text-stone-900">{match[2]}</strong>);
     } else {
-      const ids = match[3].split(",").map((s) => s.trim());
+      // Filter out page annotations (p.50, page 50) — only keep resource IDs
+      const ids = match[3].split(/,\s*/).map((s) => s.trim()).filter((s) => /^ks_\d+$/.test(s));
       for (let i = 0; i < ids.length; i++) {
         const rid = ids[i];
         const label = corpus.get(rid)?.title ?? rid;

@@ -35,7 +35,10 @@ interface QueryPoint {
 interface Props {
   citedIds: Set<string>;
   focusedDocId: string | null;
+  hoveredDocId: string | null;
   onFocusDoc: (id: string | null) => void;
+  onHoverDoc: (id: string | null) => void;
+  onCollapse: () => void;
   lastQuery: string;
 }
 
@@ -61,7 +64,7 @@ function wrapText(text: string, maxChars: number): string {
   return lines.join("<br>");
 }
 
-export default function CorpusExplorer({ citedIds, focusedDocId, onFocusDoc, lastQuery }: Props) {
+export default function CorpusExplorer({ citedIds, focusedDocId, hoveredDocId, onFocusDoc, onHoverDoc, onCollapse, lastQuery }: Props) {
   const [data, setData] = useState<CorpusData | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [search, setSearch] = useState("");
@@ -226,6 +229,26 @@ export default function CorpusExplorer({ citedIds, focusedDocId, onFocusDoc, las
     });
   }
 
+  // ── Hovered doc ring (from source card hover) ────────────────────────────
+  const hoveredDoc = hoveredDocId ? data.docs.find((d) => d.resource_id === hoveredDocId) : null;
+  if (hoveredDoc) {
+    traces.push({
+      x: [hoveredDoc.umap_x],
+      y: [hoveredDoc.umap_y],
+      mode: "markers",
+      type: "scatter",
+      name: "_hovered",
+      showlegend: false,
+      marker: {
+        size: 30,
+        color: "rgba(0,0,0,0)",
+        opacity: 1,
+        line: { color: "#16a34a", width: 2.5 },
+      },
+      hoverinfo: "skip",
+    });
+  }
+
   // ── Focused doc selection ring ────────────────────────────────────────────
   if (focusedDoc) {
     traces.push({
@@ -238,7 +261,7 @@ export default function CorpusExplorer({ citedIds, focusedDocId, onFocusDoc, las
       name: "_focused",
       showlegend: false,
       marker: {
-        size: 30,
+        size: 34,
         color: "rgba(0,0,0,0)",
         opacity: 1,
         line: { color: "#1c1917", width: 2.5 },
@@ -249,7 +272,7 @@ export default function CorpusExplorer({ citedIds, focusedDocId, onFocusDoc, las
 
   return (
     <div className="flex flex-col h-full min-h-0">
-        {/* Search bar + explain chip */}
+        {/* Search bar + collapse button */}
         <div className="shrink-0 border-b border-stone-100 px-3 py-2 flex items-center gap-2">
           <div className="relative flex-1">
             <svg
@@ -275,6 +298,15 @@ export default function CorpusExplorer({ citedIds, focusedDocId, onFocusDoc, las
               </button>
             )}
           </div>
+          <button
+            onClick={onCollapse}
+            title="Collapse map"
+            className="shrink-0 w-6 h-6 flex items-center justify-center rounded text-stone-400 hover:text-stone-600 hover:bg-stone-100 transition-colors"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-3.5 h-3.5">
+              <path d="M10 3L5 8l5 5" />
+            </svg>
+          </button>
         </div>
 
         {/* Plot + overlays */}
@@ -289,7 +321,7 @@ export default function CorpusExplorer({ citedIds, focusedDocId, onFocusDoc, las
                 margin: { l: 8, r: 8, t: 8, b: 8 },
                 xaxis: { showgrid: false, zeroline: false, showticklabels: false },
                 yaxis: { showgrid: false, zeroline: false, showticklabels: false },
-                dragmode: "pan",
+                dragmode: false,
                 legend: {
                   orientation: "h",
                   y: -0.01,
@@ -315,7 +347,7 @@ export default function CorpusExplorer({ citedIds, focusedDocId, onFocusDoc, las
               config={{
                 displayModeBar: false,
                 responsive: true,
-                scrollZoom: true,
+                scrollZoom: false,
               }}
               style={{ width: "100%", height: "100%" }}
               onClick={(e: any) => {
@@ -325,8 +357,15 @@ export default function CorpusExplorer({ citedIds, focusedDocId, onFocusDoc, las
                 onFocusDoc(rid === focusedDocId ? null : rid);
               }}
               onLegendClick={() => false}
-              onHover={() => {
+              onHover={(e: any) => {
                 if (!hasInteracted) setHasInteracted(true);
+                const rid = e.points?.[0]?.customdata;
+                if (rid && !String(rid).startsWith("_") && citedIds.has(rid)) {
+                  onHoverDoc(rid);
+                }
+              }}
+              onUnhover={() => {
+                onHoverDoc(null);
               }}
             />
           </div>
@@ -354,8 +393,8 @@ export default function CorpusExplorer({ citedIds, focusedDocId, onFocusDoc, las
             </div>
           )}
 
-          {/* Focused doc detail card — slides up from bottom */}
-          {focusedDoc && (
+          {/* Focused doc detail card — only for non-cited docs; cited docs route to the sources panel */}
+          {focusedDoc && !citedIds.has(focusedDoc.resource_id) && (
             <div className="absolute bottom-0 left-0 right-0 z-20 bg-white border-t border-stone-200 shadow-lg px-5 py-4">
               <div className="flex items-start justify-between gap-4">
                 <div className="flex-1 min-w-0">

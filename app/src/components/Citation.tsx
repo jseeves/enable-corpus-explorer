@@ -8,6 +8,7 @@ interface CitationData {
   page_num: number;
   score: number;
   excerpt: string;
+  reason?: string | null;
 }
 
 interface Props {
@@ -27,23 +28,39 @@ interface Props {
  */
 export default function Citation({ resourceId, data, label, onOpen }: Props) {
   const [open, setOpen] = useState(false);
+  const [hovered, setHovered] = useState(false);
   const known = !!data;
+  const hasReason = known && !!data.reason;
 
   const rawLabel = label ?? (known ? data.title : resourceId);
   const chipLabel = rawLabel.length > 42 ? rawLabel.slice(0, 40).trimEnd() + "..." : rawLabel;
 
   return (
-    <span className="relative inline-block">
+    <span
+      className="relative inline-block"
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+    >
       <button
         onClick={() => onOpen ? onOpen() : setOpen(!open)}
         className={
           "citation-chip " +
           (known ? "" : "!bg-amber-100 !text-amber-900")
         }
-        title={known ? `${data.title} (p.${data.page_num})` : "Citation not in retrieved set"}
       >
         {chipLabel}
       </button>
+
+      {/* Hover tooltip — shows "why this source?" reason */}
+      {hovered && hasReason && !open && (
+        <div className="absolute z-20 bottom-full mb-2 left-1/2 -translate-x-1/2 w-56 bg-stone-900 text-white text-[11px] leading-relaxed rounded-lg px-3 py-2 shadow-lg pointer-events-none">
+          <p className="text-green-300 font-medium mb-0.5 text-[10px] uppercase tracking-wide">Why this source?</p>
+          <p>{data!.reason}</p>
+          <div className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-stone-900" />
+        </div>
+      )}
+
+      {/* Click popover — shows excerpt (only when no onOpen handler) */}
       {open && (
         <div
           className="absolute z-10 left-0 top-full mt-1 w-80 bg-white border border-stone-300 rounded shadow-lg p-3 text-sm font-sans"

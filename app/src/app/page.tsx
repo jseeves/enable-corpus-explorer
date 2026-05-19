@@ -21,6 +21,8 @@ export default function Home() {
   const [citedIds, setCitedIds] = useState<Set<string>>(new Set());
   const [citationsFull, setCitationsFull] = useState<CitationData[]>([]);
   const [focusedDocId, setFocusedDocId] = useState<string | null>(null);
+  const [hoveredDocId, setHoveredDocId] = useState<string | null>(null);
+  const [mapCollapsed, setMapCollapsed] = useState(false);
   const [lastQuery, setLastQuery] = useState("");
   const [explanationTrigger] = useState(1);
   const [view, setView] = useState<View>("explorer");
@@ -63,14 +65,32 @@ export default function Home() {
       <div className="flex flex-1 min-h-0">
         {view === "explorer" ? (
           <>
-            {/* Left: visualization */}
-            <div className="w-[48%] border-r border-stone-200 flex flex-col min-h-0">
-              <CorpusExplorer
-                citedIds={citedIds}
-                focusedDocId={focusedDocId}
-                onFocusDoc={setFocusedDocId}
-                lastQuery={lastQuery}
-              />
+            {/* Left: visualization (collapsible) */}
+            <div className={`${mapCollapsed ? "w-8" : "w-[48%]"} transition-[width] duration-300 ease-in-out border-r border-stone-200 flex flex-col min-h-0 shrink-0 overflow-hidden`}>
+              {mapCollapsed ? (
+                <button
+                  onClick={() => setMapCollapsed(false)}
+                  title="Expand map"
+                  className="flex-1 flex flex-col items-center justify-start pt-4 gap-3 w-full text-stone-400 hover:text-stone-600 hover:bg-stone-50 transition-colors"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-3.5 h-3.5 shrink-0">
+                    <path d="M6 3l5 5-5 5" />
+                  </svg>
+                  <span className="text-[10px] uppercase tracking-widest font-medium text-stone-300" style={{ writingMode: "vertical-rl" }}>
+                    Map
+                  </span>
+                </button>
+              ) : (
+                <CorpusExplorer
+                  citedIds={citedIds}
+                  focusedDocId={focusedDocId}
+                  hoveredDocId={hoveredDocId}
+                  onFocusDoc={setFocusedDocId}
+                  onHoverDoc={setHoveredDocId}
+                  onCollapse={() => setMapCollapsed(true)}
+                  lastQuery={lastQuery}
+                />
+              )}
             </div>
             {/* Middle: chat */}
             <div className="flex-1 flex flex-col min-h-0 border-r border-stone-200">
@@ -85,9 +105,14 @@ export default function Home() {
                 explanationTrigger={explanationTrigger}
               />
             </div>
-            {/* Right: sources */}
-            <div className="w-72 flex flex-col min-h-0">
-              <SourcesPanel citations={citationsFull} />
+            {/* Right: sources (widens when map is collapsed) */}
+            <div className={`${mapCollapsed ? "w-96" : "w-72"} transition-[width] duration-300 ease-in-out flex flex-col min-h-0 shrink-0`}>
+              <SourcesPanel
+                citations={citationsFull}
+                focusedDocId={focusedDocId}
+                hoveredDocId={hoveredDocId}
+                onHoverSource={setHoveredDocId}
+              />
             </div>
           </>
         ) : (

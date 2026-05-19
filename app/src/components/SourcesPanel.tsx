@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface Doc {
   resource_id: string;
@@ -22,6 +22,9 @@ interface CitationData {
 
 interface Props {
   citations: CitationData[];
+  focusedDocId: string | null;
+  hoveredDocId: string | null;
+  onHoverSource: (id: string | null) => void;
 }
 
 const ORG_COLORS: Record<string, { bg: string; text: string }> = {
@@ -52,7 +55,7 @@ function docTypeLabel(t: string) {
   return t.replace(/_/g, " ");
 }
 
-export default function SourcesPanel({ citations }: Props) {
+export default function SourcesPanel({ citations, focusedDocId, hoveredDocId, onHoverSource }: Props) {
   const [corpus, setCorpus] = useState<Map<string, Doc>>(new Map());
 
   useEffect(() => {
@@ -83,12 +86,25 @@ export default function SourcesPanel({ citations }: Props) {
         {isEmpty ? (
           <EmptyState />
         ) : (
-          citations.map((c) => {
-            const doc = corpus.get(c.resource_id);
-            return (
-              <SourceCard key={c.resource_id} citation={c} doc={doc ?? null} />
-            );
-          })
+          (() => {
+            const maxScore = Math.max(...citations.map((c) => c.score), 0.001);
+            return citations.map((c, i) => {
+              const doc = corpus.get(c.resource_id);
+              return (
+                <SourceCard
+                  key={c.resource_id}
+                  citation={c}
+                  doc={doc ?? null}
+                  relevance={c.score / maxScore}
+                  entryIndex={i}
+                  isHovered={hoveredDocId === c.resource_id}
+                  isFocused={focusedDocId === c.resource_id}
+                  onHover={() => onHoverSource(c.resource_id)}
+                  onUnhover={() => onHoverSource(null)}
+                />
+              );
+            });
+          })()
         )}
       </div>
     </div>
@@ -130,16 +146,51 @@ function PassageSegments({ text }: { text: string }) {
   );
 }
 
-function SourceCard({ citation, doc }: { citation: CitationData; doc: Doc | null }) {
+function SourceCard({
+  citation, doc, relevance, entryIndex, isHovered, isFocused, onHover, onUnhover,
+}: {
+  citation: CitationData;
+  doc: Doc | null;
+  relevance: number;
+  entryIndex: number;
+  isHovered: boolean;
+  isFocused: boolean;
+  onHover: () => void;
+  onUnhover: () => void;
+}) {
   const [passageOpen, setPassageOpen] = useState(false);
+  const cardRef = useRef<HTMLDivElement>(null);
   const org = doc?.organization ?? "World Resources Institute";
   const title = doc?.title ?? citation.title;
   const docType = doc?.document_type ?? "";
   const sourceUrl = doc?.source_url ?? null;
   const excerpt = citation.excerpt ?? "";
 
+  useEffect(() => {
+    if (isFocused && cardRef.current) {
+      cardRef.current.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }
+  }, [isFocused]);
+
+  const borderClass = isFocused
+    ? "border-green-500 shadow-sm"
+    : isHovered
+    ? "border-green-300"
+    : "border-stone-200";
+
   return (
-    <div className="bg-white rounded-lg border border-stone-200 overflow-hidden">
+    <div
+      ref={cardRef}
+      className={`source-card-enter relative bg-white rounded-lg border overflow-hidden transition-colors duration-150 ${borderClass}`}
+      style={{ animationDelay: `${entryIndex * 60}ms` }}
+      onMouseEnter={onHover}
+      onMouseLeave={onUnhover}
+    >
+      {/* Relevance bar — left edge, opacity proportional to normalized score */}
+      <div
+        className="absolute left-0 top-0 bottom-0 w-[3px] rounded-l-lg bg-green-600 pointer-events-none"
+        style={{ opacity: 0.25 + relevance * 0.65 }}
+      />
       {/* Org + type badges */}
       <div className="px-3 pt-3 pb-2 flex items-center gap-1.5 flex-wrap">
         <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${orgBadgeClasses(org)}`}>
